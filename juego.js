@@ -10,7 +10,7 @@ let ataque = 1;
 let defensa = 1;
 
 function elegirClase(){
-clasePersonaje = parseInt(prompt("Elige tu clase\n1-Guerrero\n2-mago\n3-Cambiar nombre\n\nLos guerreros están equipados con armadura (defensa+3), los magos hacen el doble de daño (Pero tienen la mitad de salud y no tienen armadura alguna"));
+clasePersonaje = parseInt(prompt("Elige tu clase\n1-Guerrero\n2-mago\n3-Cambiar nombre\n\nLos guerreros están equipados con armadura (defensa+3), los magos hacen el doble de daño (Pero tienen la mitad de salud y no tienen armadura alguna)"));
 
 
 if (clasePersonaje ==1) {
