@@ -40,7 +40,7 @@ crearPersonaje()
 elegirClase();
 
 
-alert (nombrePersonaje+", " +clasePersonaje+ ", salud: "+ vida+" Daño: "+ ataque)
+alert (nombrePersonaje+", " +clasePersonaje+ "\n salud: "+ vida+"\n Daño: "+ ataque+"\n Armadura: "+defensa)
 
 alert ("Comenzando juego")
 
