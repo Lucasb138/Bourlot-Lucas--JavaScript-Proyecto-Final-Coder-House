@@ -19,4 +19,3 @@ console.log ("Vida tras el evento 1 = " + vidaActual)
 
 console.table(inventario);
 console.log ("Fin del juego, "+ nombrePersonaje);
-console.log (vidaActual);
