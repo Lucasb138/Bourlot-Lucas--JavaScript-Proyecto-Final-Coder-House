@@ -190,8 +190,8 @@ function mostrarStats(){
         }
 
     function mostrarInventario(){
-        inventario.forEach((objeto) => alert.table("En tu mochila encuentras:" + objeto.nombre));
-        //Código para usar con DOM:
+        inventario.forEach((objeto) => alert("En tu mochila encuentras:" + objeto.nombre));
+        //Codigo para DOM
         const inventarioMostrado = inventario.map((objeto) => {
             return{
                 nombreObjeto: objeto.nombre,
