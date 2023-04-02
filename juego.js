@@ -13,7 +13,7 @@ revisarVida()
 Evento1();
 revisarVida();
 alert ("Fin del juego");
-console.log ("Prueba de poción en funcionamiento = " + vidaActual)
+console.log ("Vida tras el evento 1 = " + vidaActual)
 
 //demostración de variables actualizadas al final del código: 
 
