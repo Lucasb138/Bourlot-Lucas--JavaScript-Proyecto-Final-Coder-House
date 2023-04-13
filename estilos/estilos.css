@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: rgb(61, 58, 70);
+  color: white;
+}
+
+#pantallaJuego {
+  background-color: rgb(39, 38, 39);
+  height: 85vh;
+}
+#pantallaJuego h2 {
+  margin-top: 20px;
+  color: rgb(211, 208, 212);
+  font-size: 75px;
+  margin-bottom: 50px;
+}
+#pantallaJuego h3 {
+  margin-top: 50px;
+  color: rgb(211, 208, 212);
+  font-size: 40px;
+  margin-bottom: 50px;
+}
+
+#pantallaSuperior {
+  height: 200px;
+}
+
+#pantallaCentral {
+  height: auto;
+}
+#pantallaCentral #menuPrincipal p {
+  background-color: rgb(168, 135, 27);
+  font-size: 20px;
+  border: 1px solid rgb(236, 236, 236);
+}
+
+#pantallaInferior #inventario {
+  height: 100px;
+  width: 80%;
+  background-color: red;
+}
+
+.borde {
+  background-color: black;
+}
+
+.infoCodigo {
+  margin-left: 1px;
+}
+.infoCodigo p {
+  padding: 20px;
+}
+
+#selectorPersonaje {
+  margin: 20px;
+}
+
+.personajeSeleccionable {
+  background-color: rgb(90, 88, 97);
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.estiloTarjeta {
+  color: rgb(202, 201, 198);
+}/*# sourceMappingURL=estilos.css.map */
