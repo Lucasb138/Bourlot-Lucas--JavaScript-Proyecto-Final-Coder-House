@@ -1,3 +1,4 @@
+
 //Comenzando juego:
 
 function revisarVida(){

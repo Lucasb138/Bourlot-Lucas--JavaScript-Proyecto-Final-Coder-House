@@ -1,50 +1,134 @@
 //Menu
-    let nombrePersonaje = "jugador1";
-    let botonComenzar = document.getElementById("botonComenzar");
-    let inicioJuego = document.getElementById ("pantallaPrincipal")
-    botonComenzar.onclick = () => {
-        inicioJuego.innerHTML = 
-        `<div id="pantallaSuperior">
+let nombrePersonaje = "";
+let botonComenzar = document.getElementById("botonComenzar");
+let inicioJuego = document.getElementById ("pantallaPrincipal");
+let selectorNombre = document.getElementById ("pantallaPrincipal");
 
-        <h3 class= "text-center">Elige el nombre de tu personaje</h3>
-        
+function game() {
+    botonComenzar.onclick = () => { 
+        iniciarJuego();
+    }
+}
+
+function iniciarJuego() {
+    inicioJuego.innerHTML = 
+        `<div id="pantallaSuperior">
+            <h3 class= "text-center">Elige el nombre de tu personaje</h3>
         </div>
         <div id="pantallaCentral">
-            
-        <div class= "text-center row" id="menuPrincipal">
+            <div class= "text-center row" id="menuPrincipal">
                 <div class="col-3"></div>
-                
-                    <div class="col-6">
-                        <div>
+                <div class="col-6">
+                    <div>
                         <input id="ingresarNombre" type="text" placeholder: " ">
-                        </div>
-                            <button id="aceptar">Aceptar</button>
-                        
                     </div>
+                    <button id="aceptarNombre">Aceptar</button>
                 </div>
                 <div class="col-3"></div> 
-    
-            
-            </div>`
+            </div>
+        </div>`;
 
+    let botonAceptarNombre = document.getElementById("aceptarNombre");
+
+    botonAceptarNombre.onclick = () => {
+        nombrePersonaje = document.getElementById("ingresarNombre").value;
+
+        mostrarMenuClase(); // mostrar siguiente menú
+    };
+}
+
+function mostrarMenuClase() {
+    inicioJuego.innerHTML = 
+        `<div id="pantallaCentral">
+
+        
+        <div class="row justify-content-center" id="selectorPersonaje">
+
+        <div class="card col-3 personajeSeleccionable" style="width: 18rem;">
+                <img class="card-img-top" src="./img/guerrero.png" alt="Card image cap">
+            <div class="card-body estiloTarjeta">
+                <h5 class="card-title text-center">guerrero</h5>
+                <p class="card-text">
+                <div>
+                salud: 25 <br>
+                fuerza: 7 <br>
+                Armadura: 3 <br>
+                Agilidad: 4 <br>
+                mana: 0 <br>
+                </div>
+                </p>
+                <a href="#" class="btn btn-primary" id= "seleccionGuerrero">Seleccionar</a>
+            </div>
+        </div>
+        
+        <div class="card col-3 personajeSeleccionable" style="width: 18rem;">
+            <img class="card-img-top" src="./img/guerrero.png" alt="Card image cap">
+        <div class="card-body estiloTarjeta">
+            <h5 class="card-title text-center">mago</h5>
+            <p class="card-text">
+                salud: 10 <br>
+                Fuerza: 2<br>
+                Armadura: 0<br>
+                Agilidad: 2<br>
+                Mana: 7</p>
+            <a href="#" class="btn btn-primary" id=seleccionMago>Seleccionar</a>
+        </div>
+    </div>
+
+    <div class="card col-3 personajeSeleccionable" style="width: 18rem;">
+        <img class="card-img-top" src="./img/guerrero.png" alt="Card image cap">
+    <div class="card-body estiloTarjeta">
+        <h5 class="card-title text-center">ladron</h5>
+        <p class="card-text">
+            salud: 15 <br>
+            Daño: 4 <br>
+            Armadura: 2 <br>
+            Agilidad: 9 <br>
+            Mana: 1</p>
+        <a href="#" class="btn btn-primary" id= "seleccionLadron">Seleccionar</a>
+    </div>
+</div>`;
+}
+
+game();
+            /* 
+            botonAceptarNombre.onclick = () => irACreacionPJ
+            function irACreacionPJ () 
+            {
+                inicioJuego.innerHTML = `asdasd `
+            }
+/*  
+
+    aceptarNombre.onclick () => {
+        
+    }
     let nombreIngresado = document.getElementById("ingresarNombre");
     nombreIngresado.onchange = () => {
         nombrePersonaje = nombreIngresado.value ;
         console.log (nombrePersonaje)
         return nombrePersonaje
     }
-    console.log (nombrePersonaje)
     
     let botonAceptar = document.getElementById("aceptar");
     botonAceptar.onclick = () => {
     if (nombrePersonaje == "" || nombrePersonaje == null) {
-        alert("Coloca un nombre válido");}}
-    }
+        alert("Coloca un nombre válido");
 
-    if (nombrePersonaje != "jugador1") {
-    console.log (nombrePersonaje)}
-/*
-    inicioJuego.innerHTML = `
+    }else {
+        aceptarNombre = "aceptado";
+        console.log(aceptarNombre)
+        return aceptarNombre;   
+    }
+    
+}
+    
+    
+    
+    if (aceptarNombre == "aceptado") { 
+        inicioJuego = selectorPersonaje
+    selectorPersonaje = () => {
+
+        selectorPersonaje.innerHTML = `
         <div id="pantallaCentral">
 
         
@@ -96,8 +180,14 @@
 </div>
 
 </main>`
+    }
 
- */
+    
+    }
+
+
+
+    /* 
 
     
 
@@ -105,7 +195,6 @@
 //Creación de PJ
 
 
-/* 
 
 
 class claseElegible {
@@ -321,5 +410,6 @@ function muerte(){
         Evento1();
     }
     
-    */
+     */
+    
     
