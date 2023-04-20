@@ -3,9 +3,12 @@
     padding: 0;
 }
 
+//Proyecto adaptado a una resolución mínima de 1000x700
+
 $colorPagina: rgb(61, 58, 70);
 $colorFondo: rgba(39, 38, 39, 1);
 $colorTexto: rgb(211, 208, 212);
+$colorBoton: rgb(168, 135, 27);
 
 body {
     background-color: rgb(61, 58, 70);
@@ -31,11 +34,11 @@ body {
     }
 }
 
-#pantallaSuperior {
+#pantallaSuperiorMenu {
     height: 200px;
 }
 
-#pantallaCentral{
+#pantallaCentralMenu{
     height: auto;
     #menuPrincipal p{
     background-color: rgb(168, 135, 27);
@@ -44,14 +47,7 @@ body {
     }
 }
 
-#pantallaInferior {
-    #inventario {
-        height: 100px;
-        width: 80%;
-        background-color: red;
-    }
-    
-}
+
 
 .borde {
     background-color: black;
@@ -65,6 +61,11 @@ body {
     }
 }
 
+#seleccionCambioNombre {
+    margin-top: 10px;
+    background-color: $colorBoton;
+}
+
 #selectorPersonaje {
     margin: 20px;
 }
@@ -76,4 +77,74 @@ body {
 
 .estiloTarjeta {
     color: rgb(202, 201, 198)
+}
+
+
+.fondoJuego {
+    background-image: url(../img/fondoJuego.jpg);
+    background-position: center;
+}
+
+#pantallaSuperior{
+    height: 95px;
+}
+
+#pantallaCentral{
+    height: 300px;
+}
+
+#pantallaInferior {
+    height: 80px;
+
+    .progress {
+        margin-top: 5px;
+    }
+
+.hud {
+        margin: 2px;
+        height: 70%;
+        background-color:slategray;
+
+        p{
+            margin-top: 5px;
+        }
+
+        .lineaDatoHud{
+            margin-top: 15px;
+        }
+
+}}
+
+#estadisticas {
+
+    height: 90px;
+    width: 100px;
+    background-image: url(../img/guerrero.png);
+    background-position: center;
+    margin-top: 5px;
+}
+
+#mochila {
+    height: 100px;
+    width: 100px;
+    background-image: url(../img/leather-drawing-15.png);
+    background-position: center;
+    opacity: 0.5;
+}
+
+#mochila:hover {
+    opacity: 0.8;
+}
+
+#menuInventario {
+    height: 220px;
+    margin-top: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
+    background-color: black;
+
+    }
+
+.textoPrueba {
+    color:black
 }

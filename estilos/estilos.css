@@ -25,23 +25,17 @@ body {
   margin-bottom: 50px;
 }
 
-#pantallaSuperior {
+#pantallaSuperiorMenu {
   height: 200px;
 }
 
-#pantallaCentral {
+#pantallaCentralMenu {
   height: auto;
 }
-#pantallaCentral #menuPrincipal p {
+#pantallaCentralMenu #menuPrincipal p {
   background-color: rgb(168, 135, 27);
   font-size: 20px;
   border: 1px solid rgb(236, 236, 236);
-}
-
-#pantallaInferior #inventario {
-  height: 100px;
-  width: 80%;
-  background-color: red;
 }
 
 .borde {
@@ -53,6 +47,11 @@ body {
 }
 .infoCodigo p {
   padding: 20px;
+}
+
+#seleccionCambioNombre {
+  margin-top: 10px;
+  background-color: rgb(168, 135, 27);
 }
 
 #selectorPersonaje {
@@ -67,4 +66,67 @@ body {
 
 .estiloTarjeta {
   color: rgb(202, 201, 198);
+}
+
+.fondoJuego {
+  background-image: url(../img/fondoJuego.jpg);
+  background-position: center;
+}
+
+#pantallaSuperior {
+  height: 95px;
+}
+
+#pantallaCentral {
+  height: 300px;
+}
+
+#pantallaInferior {
+  height: 80px;
+}
+#pantallaInferior .progress {
+  margin-top: 5px;
+}
+#pantallaInferior .hud {
+  margin: 2px;
+  height: 70%;
+  background-color: slategray;
+}
+#pantallaInferior .hud p {
+  margin-top: 5px;
+}
+#pantallaInferior .hud .lineaDatoHud {
+  margin-top: 15px;
+}
+
+#estadisticas {
+  height: 90px;
+  width: 100px;
+  background-image: url(../img/guerrero.png);
+  background-position: center;
+  margin-top: 5px;
+}
+
+#mochila {
+  height: 100px;
+  width: 100px;
+  background-image: url(../img/leather-drawing-15.png);
+  background-position: center;
+  opacity: 0.5;
+}
+
+#mochila:hover {
+  opacity: 0.8;
+}
+
+#menuInventario {
+  height: 220px;
+  margin-top: 10px;
+  margin-left: 100px;
+  margin-right: 100px;
+  background-color: black;
+}
+
+.textoPrueba {
+  color: black;
 }/*# sourceMappingURL=estilos.css.map */
