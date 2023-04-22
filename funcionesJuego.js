@@ -262,12 +262,11 @@ function comenzarAventura() {
 
     `
 
-    let mostrandoInventario = false;
     let pantallaAnterior = null;
     const mochilaJugador = document.getElementById("mochila");
     const pantallaCentral = document.getElementById("pantallaCentral");
 
-
+    let mostrandoInventario = false;
     mochilaJugador.onclick = () => {
         if (!mostrandoInventario) {
             pantallaAnterior = pantallaCentral.innerHTML
@@ -276,18 +275,20 @@ function comenzarAventura() {
         } else {
             ocultarInventario();
             mostrandoInventario = false
-            pantallaCentral.innerHTML= pantallaAnterior
+            pantallaCentral.innerHTML = pantallaAnterior
         }
     }
 }
 
-game()
+
 
 
 
 
 
 //Inventario
+
+
 class consumibleInventario {
     constructor(id, nombre, efectoSalud, valorTienda, descripcion, imagen) {
         this.id = id;
@@ -320,7 +321,7 @@ let pocionSaludSuprema = new consumibleInventario(102, "Poción de salud suprema
 let manzana = new consumibleInventario(103, "manzana", 1, 3, "Una manzana, restaura 1 punto de vida,", `<img src="./img/objeto.png">`)
 
 //INVENTARIO JUEGO - IMPORTANTE : 
-const inventario = [pocionSaludSuprema];
+;
 
 function remover(objeto) {
     let objetoRemovido = inventario.indexOf(objeto);
@@ -346,15 +347,21 @@ function beberPocionSaludSuprema() {
     }
 }
 
+const inventario = [pocionSaludSuprema]
+
 
 
 //Armas
-let espadaBasica = new armaInventario(001, "Espada", 5, personaje.fuerza, 15, `Espada básica, que todo aventurero novato carga. Daño= 5 + ${personaje.fuerza}`, `<img src="./img/objeto.png">`)
-let daga = new armaInventario(002, "daga", 2, personaje.agilidad, 10, `Una daga, especial para encuentros cercanos. Daño = 2 + ${personaje.agilidad}`, `<img src="./img/objeto.png">`)
-let varitaMagica = new armaInventario(003, "varita mágica", 10, personaje.mana, 60, "Una varita mágica de mago aprendiz, dispara chispas ardientes. Daño= 10. Consume 1 de maná por uso", `<img src="./img/objeto.png">`)
+
+
 
 //armas iniciales:
 function DarArmaInicial() {
+
+    let espadaBasica = new armaInventario(001, "Espada", 5, personaje.fuerza, 15, `Espada básica, que todo aventurero novato carga. Daño= 5 + ${personaje.fuerza}`, `<img src="./img/espada.png"></img>`)
+    let varitaMagica = new armaInventario(002, "varita mágica", 10, personaje.mana, 60, "Una varita mágica de mago aprendiz, dispara chispas ardientes. Daño= 10. Consume 1 de maná por uso", `<img src="./img/varitaMagica.png">`)
+    let daga = new armaInventario(003, "daga", 2, personaje.agilidad, 10, `Una daga, especial para encuentros cercanos. Daño = 2 + ${personaje.agilidad}`, `<img src="./img/daga.png">`)
+
     if (personaje.nombreClase == "guerrero") {
         inventario.push(espadaBasica);
     } else if (personaje.nombreClase == "mago") {
@@ -379,7 +386,10 @@ function muerte() {
 // Mostrar inventario
 function mostrarInventario() {
 
-    let imagenDefecto = `<img src="./img/objeto.png"></img>`
+
+
+
+    let imagenDefecto = `<img src="./img/plantillaInventario.png"></img>`
     let inventarioMostrado = inventario.map((objeto) => {
         return {
             imagenObjeto: objeto.imagen,
@@ -401,34 +411,53 @@ function mostrarInventario() {
 
     mostrandoInventario = true
 
-    
+
     pantallaCentral.innerHTML = `
-    <div class= row col-12 id= menuInventario>
-    <div class= col-3 cuadricula>${inventarioMostrado[0].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[1].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[2].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[3].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[4].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[5].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[6].imagenObjeto}</div>
-    <div class= col-3 cuadricula>${inventarioMostrado[7].imagenObjeto}</div>
+    <div class= "row">
+    <div class= "col-8" id= "menuInventario">
+    <div class= "row">
+    <div class= "col-3 cuadricula">${inventarioMostrado[0].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[1].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[2].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[3].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[4].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[5].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[6].imagenObjeto}</div>
+    <div class= "col-3 cuadricula">${inventarioMostrado[7].imagenObjeto}</div>
     </div>
-    `
+    </div>
+    <div class= "col-3" id="muestraInventario"><p>Pasa el mouse sobre un objeto para saber qué hace</p></div>
+    </div>
+    `;
+
+    let infoItem = document.getElementsByClassName("cuadricula");
+    for (let i = 0; i < infoItem.length; i++) {
+
+        let muestraInventario = document.getElementById("muestraInventario");
+        infoItem[i].addEventListener("mouseover", () => {
+            console.log("Fn");
+            muestraInventario.innerHTML =
+                `<p>${inventarioMostrado[i].nombreObjeto}</p>
+            <p>${inventarioMostrado[i].descripcionObjeto}</p>
+            `
+        })
+
+        infoItem[i].addEventListener("mouseout", () => {
+            muestraInventario.innerHTML =
+            `<p>Pasa el mouse sobre un objeto para saber qué hace</p>`
+        })
+    }
+
+
 }
 
-function ocultarInventario () {
+
+function ocultarInventario() {
     pantallaCentral.innerHTML = null
 }
 
 
 //Codigo para DOM
-let inventarioMostrado = inventario.map((objeto) => {
-    return {
-        nombreObjeto: objeto.nombre,
-        descripcionObjeto: objeto.descripcion,
-    }
-})
-console.table(inventarioMostrado)
 
 
 //Comienzo de juego : 
@@ -451,4 +480,5 @@ function Evento1() {
     } else
         alert("Error, intenta de nuevo")
 }
-        //Evento1();
+
+game()

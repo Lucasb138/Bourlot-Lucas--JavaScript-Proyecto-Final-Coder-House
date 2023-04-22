@@ -137,13 +137,24 @@ body {
 }
 
 #menuInventario {
-    height: 220px;
-    margin-top: 10px;
-    margin-left: 100px;
-    margin-right: 100px;
-    background-color: black;
-
+    margin-top: 5px;
+    margin-left: 50px;
+    height: auto;
+    background-color: rgb(14, 13, 13);
+    gap:5px
     }
+
+#muestraInventario{
+    margin-top: 5px;
+    height: auto;
+    background-color: green;
+}
+
+.cuadricula{
+    width: 97px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 .textoPrueba {
     color:black
