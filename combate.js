@@ -2,19 +2,20 @@
 //enemigos:
 
 class Enemigo {
-    constructor(nombreEnemigo, saludEnemigo, ataqueEnemigo, defensaEnemigo, agilidadEnemigo) {
+    constructor(nombreEnemigo, saludEnemigo, ataqueEnemigo, defensaEnemigo) {
         this.nombreEnemigo = nombreEnemigo;
         this.saludEnemigo = saludEnemigo;
         this.ataqueEnemigo = ataqueEnemigo;
         this.defensaEnemigo = defensaEnemigo;
-        this.agilidadEnemigo = agilidadEnemigo;
     }
 }
 
 
-const lobo = new Enemigo ("Lobo", 3, 4, 0, 5);
-const zombie = new Enemigo ("Zombie", 5, 1, 1, 1);
-const bandido = new Enemigo (" bandido", 5, 3, 3, 3);
+const lobo = new Enemigo ("Lobo", 3, 4, 0);
+const zombie = new Enemigo ("Zombie", 5, 1, 1);
+const bandido = new Enemigo (" bandido", 5, 3, 3);
+//const enemigoVacio = new Enemigo ("", 0, 0 , 0)
+
 
 let enemigo1 = null;
 let enemigo2 = null;
@@ -23,20 +24,28 @@ let enemigo4 = null;
 
 
 function Combate() {
-    let combatienes = [jugador, enemigo1, enemigo2, enemigo3, enemigo4]
-    let ordenCombate = [];
-    jugador=personaje.agilidad;
-    enemigo1=enemigo1.agilidad;
-    enemigo2=enemigo2.agilidad;
-    enemigo3=enemigo3.agilidad;
-    enemigo4=enemigo4.agilidad;
-
-    console.log (combatienes)
+    let ordenCombate = [jugador]
+    for(let enemigos of listaEnemigos){
+    ordenCombate.push (enemigos)
     }
+    console.log (ordenCombate);
+    let rondaCombateMax = ordenCombate.lenght;
+    
+    let inicioRonda = 1
+    if (inicioRonda == 1) {
+        PantallaCentral.innerHTML = `
+        <button>atacar</button>
+        `
+    }
+    
+}
+
+
 
 function encuentro1 () {
-    enemigo1= lobo;
-    enemigo2= lobo;
-    Combate()
+    jugador= personaje;
+    listaEnemigos= [lobo, lobo]
+
+    Combate() 
 }
 
