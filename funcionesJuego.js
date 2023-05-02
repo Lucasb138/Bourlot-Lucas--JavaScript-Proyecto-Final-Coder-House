@@ -339,17 +339,7 @@ class consumibleInventario {
     }
 }
 
-class armaInventario {
-    constructor(id, nombre, daño, habilidadUsada, valorTienda, descripcion, imagen) {
-        this.id = id;
-        this.nombre = nombre;
-        this.daño = daño;
-        this.habilidadUsada = habilidadUsada;
-        this.valorTienda = valorTienda
-        this.descripcion = descripcion;
-        this.imagen = imagen
-    }
-}
+
 
 
 
@@ -381,34 +371,24 @@ function usarObjeto() {
     }
 }
 
-/* function beberPocionSaludSuprema() {
-    let pocionSupremaEnInventario = inventario.find((objeto) => objeto.id == 102)
-    if (pocionSupremaEnInventario == true) {
-        objeto = pocionSaludSuprema;
-        remover(objeto)
-        for (let i = vidaActual; i < (personaje.vida + 1); i++) {
-            console.log("La poción regenera lentamente tu salud y cierra tus heridas. Salud: " + i + "/" + personaje.vida)
-            vidaActual = i
-        }
-        return vidaActual;
-    } else {
-        console.log("Error, no hay pociones de vida en el inventario")
-    } 
-} */
+
+
+let danioTotal = 1
 function equipar() {
     if (slotArma.length == 1) {
         slotArma.length = 0
     }
-    slotArma.push(itemClickeado)
-    armaEquipada.innerHTML = `${slotArma[0].imagenObjeto}`
-    console.log(itemClickeado)
+    let armaAEquiparse = inventario.find((arma) => arma.id == itemClickeado.id);
+    slotArma.push(armaAEquiparse)
+    armaEquipada.innerHTML = `${slotArma[0].imagen}`
 }
+
 
 //INVENTARIO JUEGO - IMPORTANTE : 
 
 
 const inventario = [pocionSaludSuprema]
-const slotArma = []
+let slotArma = []
 
 
 
@@ -417,6 +397,19 @@ const slotArma = []
 
 
 //armas iniciales:
+
+class armaInventario {
+    constructor(id, nombre, danio, habilidadUsada, valorTienda, descripcion, imagen) {
+        this.id = id;
+        this.nombre = nombre;
+        this.danio = danio;
+        this.habilidadUsada = habilidadUsada;
+        this.valorTienda = valorTienda
+        this.descripcion = descripcion;
+        this.imagen = imagen
+    }
+}
+
 function DarArmaInicial() {
 
     let espadaBasica = new armaInventario(001, "Espada", 5, personaje.fuerza, 15, `Espada básica, que todo aventurero novato carga. Daño= 5 + ${personaje.fuerza}`, `<img src="./img/espada.png"></img>`)
@@ -568,7 +561,7 @@ function mostrarInventario() {
         });
     }
 
-    console.table(inventarioMostrado)
+
 
 
     pantallaCentral.innerHTML = `
@@ -623,17 +616,14 @@ function mostrarInventario() {
                 switch (funcionesInventario) {
                     case 1:
                         itemClickeado = inventarioMostrado[i];
-                        console.log(itemClickeado)
                         equipar()
                         break;
                     case 2:
                         itemClickeado = inventarioMostrado[i];
-                        console.log(itemClickeado)
                         equipar()
                         break;
                     case 3:
                         itemClickeado = inventarioMostrado[i];
-                        console.log(itemClickeado)
                         equipar()
                         break;
                     case 101:
@@ -678,8 +668,9 @@ function ocultarInventario() {
 
 
 class Enemigo {
-    constructor(nombreEnemigo, saludEnemigo, ataqueEnemigo, defensaEnemigo, imagenEnemigo) {
+    constructor(nombreEnemigo, saludActualEnemigo, saludEnemigo, ataqueEnemigo, defensaEnemigo, imagenEnemigo) {
         this.nombreEnemigo = nombreEnemigo;
+        this.saludActualEnemigo = saludActualEnemigo
         this.saludEnemigo = saludEnemigo;
         this.ataqueEnemigo = ataqueEnemigo;
         this.defensaEnemigo = defensaEnemigo;
@@ -688,77 +679,122 @@ class Enemigo {
 }
 
 
-const lobo = new Enemigo("Lobo", 3, 4, 0, `<img src="./img/lobo.png">`);
-const zombie = new Enemigo("Zombie", 5, 1, 1, `<img src= "./img/objeto.png">`);
-const bandido = new Enemigo(" bandido", 5, 3, 3, `<img src= "./img/bandido.png">`);
+let lobo1 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
+let lobo2 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
+let lobo3 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
+let bandido1 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
+let bandido2 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
+let zombie = new Enemigo("Zombie", 5, 5, 1, 1, `<img src= "./img/objeto.png">`);
 //const enemigoVacio = new Enemigo ("", 0, 0 , 0)
 
-
-let enemigo1 = null;
-let enemigo2 = null;
-let enemigo3 = null;
-let enemigo4 = null;
-
-
 function Combate() {
+    let ordenCombate = [...listaEnemigos, jugador];
+    let rondaActual = 0;
 
-    let ordenCombate = [jugador]
-    for (let enemigos of listaEnemigos) {
-        ordenCombate.push(enemigos);
-    }
-
-    let rondaActual = 0
-
-    pantallaCentral.innerHTML =`
-    <div class= "row">
-        <div class= "col-12" id= "menuCombate">
-            <div class= "d-flex justify-content-center align-items-center" id="tablaCombate"></div> 
+    pantallaCentral.innerHTML = `
+    <div class="row">
+        <div class="col-12" id="menuCombate">
+            <div class="d-flex justify-content-center align-items-center" id="tablaCombate"></div> 
         </div> 
-    </div> `;
+    </div>`;
 
-    let displayEnemigos = document.getElementById("tablaCombate")
+    let displayEnemigos = document.getElementById("tablaCombate");
     for (let enemigo of listaEnemigos) {
-        displayEnemigos.innerHTML +=
-            `<div class= "d-flex detectarEnemigo">${enemigo.imagenEnemigo}${enemigo.saludEnemigo}/${enemigo.saludEnemigo}</div>`
+        displayEnemigos.innerHTML += `<div class="d-flex detectarEnemigo">${enemigo.imagenEnemigo}</div>`;
     }
 
 
-   //let rondaCombateMax = ordenCombate.length;
 
     let asignarEnemigos = document.getElementsByClassName("detectarEnemigo");
-    console.log(asignarEnemigos)
     for (let i = 0; i < asignarEnemigos.length; i++) {
-        asignarEnemigos[i].addEventListener("click", () => {
-            console.log("ataqueDetectado")
-            ejecutarTurnoCombate(ordenCombate[i], rondaActual)
-            avanzarTurnoCombate(ordenCombate, rondaActual)
-
-        })
+        let enemigoAsignado = asignarEnemigos[i];
+        enemigoAsignado.setAttribute("id", `enemigo${i + 1}`);
     }
-}
 
-//asignarEnemigos[i].setAttribute("id", `enemigo${i}`)
+    let contadorSaludEnemigo = listaEnemigos.map((datosEnemigo) => {
+        return {
+            saludActualEnemigo = datosEnemigo.saludActualEnemigo,
+            saludEnemigo = datosEnemigo.saludEnemigo,
+        }
+    });
+};
 
-function avanzarTurnoCombate (ordenCombate, rondaActual) {
-    rondaActual ++;
-    if (rondaActual >= ordenCombate.lenght) {
+
+
+detectarRonda();
+
+function detectarRonda() {
+    if (rondaActual === 0) {
+        turnoJugador();
+    } else if (rondaActual === ordenCombate.length) {
         rondaActual = 0;
+        console.log("Es tu turno");
+        if (listaEnemigos.length == 0) {
+            alert("GANASTE")
+        }
+    } else {
+        let enemigoActual = ordenCombate[rondaActual - 1];
+        turnoEnemigo(enemigoActual);
     }
-    turnoAtacanteActual = rondaActual
 }
 
-function ejecutarTurnoCombate(atacante, rondaActual){
-    if (atacante == personaje){
-        console.log("Es tu turno")
-    } else {
-        console.log(`Es el turno del enemigo ${atacante.nombre}`)
+function turnoJugador() {
+    for (let i = 0; i < asignarEnemigos.length; i++) {
+        let cuadriculaEnemigo = asignarEnemigos[i];
+        let enemigo = listaEnemigos[i];
+        if (enemigo.saludActualEnemigo > 0) {
+            const handler = () => {
+                console.log(`Atacaste a ${enemigo.nombreEnemigo}`);
+                ataqueJugador(enemigo);
+                detectarRonda();
+                cuadriculaEnemigo.removeEventListener('click', handler);
+            }
+            cuadriculaEnemigo.addEventListener("click", handler);
+        }
     }
 }
+
+let imagenMuerte = `<img src="./img/objeto.png">`
+
+function ataqueJugador(enemigo) {
+    let ataque = parseInt(slotArma[0].danio + slotArma[0].habilidadUsada)
+    console.log(`Atacaste a ${enemigo.nombreEnemigo} con ${ataque} de daño`);
+    enemigo.saludActualEnemigo -= ataque;
+    console.log(`${enemigo.nombreEnemigo} tiene ahora ${enemigo.saludActualEnemigo} de salud`);
+    rondaActual++;
+    if (enemigo.saludActualEnemigo <= 0) {
+        enemigo.saludActualEnemigo = 0
+        console.table(enemigo)
+        console.log(imagenMuerte)
+        muerteEnemigo(enemigo)
+    }
+}
+
+function muerteEnemigo(enemigo) {
+    let enemigoMuerto = listaEnemigos.indexOf(enemigo);
+    listaEnemigos.splice(enemigoMuerto, 1)
+    ordenCombate.splice(enemigoMuerto, 1)
+}
+
+
+function turnoEnemigo(enemigo) {
+    console.log(`El enemigo ${enemigo.nombreEnemigo} atacó`);
+    vidaActual -= enemigo.ataqueEnemigo - jugador.defensa;
+    console.log(`Tu personaje tiene ahora ${vidaActual} de salud.`);
+    rondaActual++;
+    detectarRonda();
+}
+
+console.log(rondaActual)
+}
+
+
+
 
 
 function encuentro1() {
     jugador = personaje;
-    listaEnemigos = [lobo, lobo]
+    listaEnemigos = [lobo1, lobo2, bandido1, lobo3]
 
     Combate()
 }
