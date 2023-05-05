@@ -89,10 +89,24 @@ body {
     color: rgb(202, 201, 198)
 }
 
+.preludio {
+    text-align: center;
+    margin: 100px;
+    margin-bottom: 0px;
+}
+
+#comenzarAventura { 
+    background-color: $colorBoton;
+    color: white;
+    width: 20%;
+    text-align: center;
+    margin-top: 35px;
+}
+
 
 .fondoJuego {
     background-image: url(../img/fondoJuego.jpg);
-    background-position: center;
+    background-position: bottom;
 }
 
 #pantallaSuperior{
@@ -100,7 +114,7 @@ body {
 }
 
 #pantallaCentral{
-    height: 300px;
+    height: 330px;
 }
 
 #pantallaInferior {
@@ -115,18 +129,17 @@ body {
         height: 70%;
         background-color:slategray;
 
-        p{
-            margin-top: 5px;
+        h5{
+            text-align: center;
         }
 
         .lineaDatoHud{
-            margin-top: 15px;
+            margin-bottom: 30px;
         }
 
 }}
 
-#armaEquipada {
-    
+#armaEquipada img{
     background-color: grey;
 }
 
@@ -174,7 +187,7 @@ body {
 
     img:hover{
         border: 1px green solid;
-    }
+    } 
 }
 
 .cuadriculaArmaEquipada{
@@ -186,10 +199,6 @@ body {
 .cuadriculaGlow{
     margin-top: 4px;
     margin-bottom: 4px;
-}
-
-.textoPrueba {
-    color:black
 }
 
 
@@ -230,6 +239,28 @@ body {
     gap: 20px;
 }
 
-.enemigoMuertoCruz {
-    border: 5px solid red;
+.detectarVidaEnemigo {
+    background-image: url(../img/CorazonEnemigo.png);
+    background-position: center;
+    height: 60px;
+    width: 65px;
+    text-align: center;
+    line-height: 60px;
+}
+
+.enemigoAtacable:hover{
+    border: 1px solid red;
+}
+
+#mensajeLoot{
+    background-color: $colorPagina;
+    width: 50%;
+    height: 200px;
+    padding-left: 15px;
+}
+
+#aceptarLoot{
+    margin-left: 80%;
+    
+    background-color: $colorBoton;
 }

@@ -21,7 +21,9 @@ function iniciarJuego() {
                 <div class="col-3"></div>
                 <div class="col-6">
                     <div>
-                        <input id="ingresarNombre" type="text" placeholder: " ">
+                    <form>
+                    <input id="ingresarNombre" type="text" placeholder: " ">
+                    </form>
                     </div>
                     <button id="aceptarNombre">Aceptar</button>
                 </div>
@@ -36,7 +38,7 @@ function iniciarJuego() {
         if (nombrePersonaje == "" || nombrePersonaje == null || nombrePersonaje == " ") {
             alert("Nombre invalido")
         } else {
-            mostrarMenuClase(); // mostrar siguiente menú
+            mostrarMenuClase();
         }
     };
 
@@ -196,8 +198,7 @@ function confirmar() {
 
     let aceptar = document.getElementById("aceptar");
     aceptar.onclick = () => {
-        comenzarAventura();
-        DarArmaInicial();
+        preludio();
         localStorage.setItem("datosPJCreado", JSON.stringify(personaje));
         const datoPJ = JSON.parse(localStorage.getItem("datosPJCreado"));
         console.log(datoPJ)
@@ -209,10 +210,24 @@ function confirmar() {
     }
 }
 
+function preludio() {
+    inicioJuego.innerHTML =
+        `<h3 class= "preludio">Las sombras hacen eco en tu ser</h3>
+        <p class= "preludio">Deberías estar muerto, pero no lo estás, una extraña fuerza te lleva a completar tu tarea, tus heridas han sanado y te encuentras nuevamente capaz para enfrentar a tus enemigos, el problema... Es que no recuerdas a qué te enfrentaste. Lo mejor será aceptar esta bendición y seguir adelante</p>
+        <div class="d-flex justify-content-center">
+        <button id="comenzarAventura">Cumpliré mi destino</button>
+        </div>`
+
+    document.getElementById("comenzarAventura").onclick = () => {
+        comenzarAventura();
+        DarArmaInicial();
+    }
+}
+
 
 
 function comenzarAventura() {
-    vidaActual = (Math.floor(personaje.vida / 2));
+    vidaActual = personaje.vida
     manaActual = personaje.mana
     iniciarRevisarVida();
 
@@ -223,12 +238,11 @@ function comenzarAventura() {
         const intervaloVida = setInterval(() => {
             if (vidaActual >= 1) {
                 revisarVida()
-                revisarMana()
             } else {
                 clearInterval(intervaloVida)
                 muerte()
             }
-        }, 500)
+        }, 200)
         inicioJuego.innerHTML = `
     <div class=" d-flex justify-content-between" id="pantallaSuperior">
 
@@ -243,25 +257,23 @@ function comenzarAventura() {
     </div>
 
     <div id="pantallaCentral">
-
     </div>
 
     <div id="pantallaInferior">
         <div class="row">
-            <div class="col-4"></div>
+            <div class="col-4"></div>   
 
-            <div class="hud col-4 justify-content-center ">
-                <div class="row lineaDatoHud"><p class="col-2">Salud:</p> <div class="col-9"><div class="progress" role="progressbar" aria-label="Example 20px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
-                    <div class="progress-bar" id="barraVida">${vidaActual}/${personaje.vida}</div> </div> </div> </div>
-
-                <div class="row lineaDatoHud"><p class="col-2">Mana:</p> <div class="col-9"><div class="progress" role="progressbar" aria-label="Example 20px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
-                    <div class="progress-bar" id="barraMana">${manaActual}/${personaje.mana}</div></div>
-                </div></div>
+                    
+                    <div class="hud col-4 justify-content-center ">
+                    <h5>Salud</h5>
+                    <div class="row lineaDatoHud"><div class="col-12"><div class="progress" role="progressbar" aria-label="Example 20px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 20px">
+                        <div class="progress-bar" id="barraVida">${vidaActual}/${personaje.vida}</div> </div> </div> </div>
+    
                 
             </div>
             
             <div class= "d-flex cuadriculaArmaEquipada" id = "armaEquipada">ARMA</div>
-            <div class="col-2"></div>
+            <div class="col-2" id="ubicacionBotonExplorar"></div>
             
         </div>
 
@@ -269,10 +281,24 @@ function comenzarAventura() {
 
     `
 
+
+        let explorarBosque = document.createElement("button")
+        explorarBosque.innerText = "Explorar el bosque"
+
+        let mostrarBoton = document.getElementById("ubicacionBotonExplorar")
+        mostrarBoton.appendChild(explorarBosque)
+
+        explorarBosque.onclick = () => {
+            encuentro1()
+            mostrarBoton.removeChild(explorarBosque)
+        }
+
+
         let pantallaSuperiorBase = document.getElementById("pantallaSuperior")
         let pantallaSuperior = pantallaSuperiorBase
         let estadisticas = document.getElementById("estadisticas")
         let mostrandoStats = false
+        let mostrandoInventario = false;
         estadisticas.onclick = () => {
             if (mostrandoInventario == true) {
                 ocultarInventario();
@@ -292,7 +318,6 @@ function comenzarAventura() {
         const mochilaJugador = document.getElementById("mochila");
         let pantallaCentral = document.getElementById("pantallaCentral");
 
-        let mostrandoInventario = false;
         mochilaJugador.onclick = () => {
             if (mostrandoStats == true) {
                 estadisticas.style = ""
@@ -301,13 +326,11 @@ function comenzarAventura() {
             };
 
             if (!mostrandoInventario) {
-                pantallaAnterior = pantallaCentral.innerHTML
                 mostrarInventario()
                 mostrandoInventario = true
             } else {
                 ocultarInventario();
                 mostrandoInventario = false
-                pantallaCentral.innerHTML = pantallaAnterior
             }
 
 
@@ -315,12 +338,7 @@ function comenzarAventura() {
     }
 
     let armaEquipada = document.getElementById("armaEquipada");
-    armaEquipada.innerHTML = `<h5>Vacío</h5>`
 }
-
-
-
-
 
 
 
@@ -344,7 +362,7 @@ class consumibleInventario {
 
 
 //Items:
-let pocionSalud = new consumibleInventario(101, "pocion", 8, 30, "Poción básica de salud, Restaura 8 puntos de vida", `<img src="./img/pocionSalud.png">`)
+let pocionSalud = new consumibleInventario(101, "pocion de salud", 8, 30, "Poción básica de salud, Restaura 8 puntos de vida", `<img src="./img/pocionSalud.png">`)
 let pocionSaludSuprema = new consumibleInventario(102, "Poción de salud suprema", 50, 200, "Una poción de vida suprema, regenera la vida por completo, muy valiosas y raras", `<img src="./img/pocionSaludSuprema.png">`)
 let manzana = new consumibleInventario(103, "manzana", 1, 3, "Una manzana, restaura 1 punto de vida,", `<img src="./img/manzana.png">`)
 
@@ -423,6 +441,8 @@ function DarArmaInicial() {
     } else if (personaje.nombreClase == "ladrón") {
         inventario.push(daga);
     }
+    slotArma.push(inventario[1])
+    armaEquipada.innerHTML = `${slotArma[0].imagen}`
 }
 
 //VIDA:
@@ -468,9 +488,10 @@ function revisarMana() {
 };
 
 
-var vidaActual = 1;
-var manaActual = personaje.mana;
+let vidaActual = 1;
+let manaActual = personaje.mana;
 let menuMostrarStats = ""
+let menuMostrarInventario = ""
 function mostrarStats() {
     menuMostrarStats = document.createElement("div")
     menuMostrarStats.classList.add("col-8")
@@ -537,10 +558,6 @@ function muerte() {
 
 // Mostrar inventario e interacciones durante el juego
 function mostrarInventario() {
-
-
-
-
     let imagenDefecto = `<img src="./img/plantillaInventario.png"></img>`
     let inventarioMostrado = inventario.map((objeto) => {
         return {
@@ -556,16 +573,15 @@ function mostrarInventario() {
             id: 0,
             imagenObjeto: imagenDefecto,
             nombreObjeto: "Vacío",
-            descripcionObjeto: "",
+            descripcionObjeto: " ",
 
         });
     }
 
+    menuMostrarInventario = document.createElement("div")
+    menuMostrarInventario.classList.add("row")
 
-
-
-    pantallaCentral.innerHTML = `
-    <div class= "row">
+    menuMostrarInventario.innerHTML = `
     <div class= "col-8" id= "menuInventario">
     <div class= "row d-flex justify-content-around align-items-center">
     <div class= "d-flex cuadricula">${inventarioMostrado[0].imagenObjeto}</div>
@@ -583,10 +599,12 @@ function mostrarInventario() {
     </div>
     </div>
     <div class= "col-3" id="muestraInventario"><p>Pasa el mouse sobre un objeto para saber qué hace. Clickealo para usarlo instantaneamente</p></div>
-    </div>
     `;
 
-    let infoItem = document.getElementsByClassName("cuadricula");
+    pantallaCentral.appendChild(menuMostrarInventario);
+
+
+    let infoItem = menuMostrarInventario.getElementsByClassName("cuadricula");
     for (let i = 0; i < infoItem.length; i++) {
 
         let muestraInventario = document.getElementById("muestraInventario");
@@ -609,8 +627,8 @@ function mostrarInventario() {
         infoItem[i].addEventListener("click", () => {
             let funcionesInventario = inventarioMostrado[i].id;
             interaccionInventario();
+            ocultarInventario();
             mostrarInventario();
-
 
             function interaccionInventario() {
                 switch (funcionesInventario) {
@@ -650,20 +668,23 @@ function mostrarInventario() {
 
 
 
-
+//Sin la variable debugInventario, el código podría tener problemas al cambiarse el innerHTML de la pantallaCentral
 function ocultarInventario() {
-    pantallaCentral.innerHTML = null
+    let debugInventario = document.getElementById("menuInventario");
+    if (debugInventario) {
+        pantallaCentral.removeChild(menuMostrarInventario)
+    };
+    inventarioMostrado = false
 }
 
 
 
 
-
+//Interaccion para entrar en combate
 
 
 
 //COMBATE
-
 
 
 
@@ -684,12 +705,23 @@ let lobo2 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let lobo3 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let bandido1 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
 let bandido2 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
-let zombie = new Enemigo("Zombie", 5, 5, 1, 1, `<img src= "./img/objeto.png">`);
+let zombie = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
 //const enemigoVacio = new Enemigo ("", 0, 0 , 0)
+
 
 function Combate() {
     let ordenCombate = [...listaEnemigos, jugador];
     let rondaActual = 0;
+
+    let contadorSaludEnemigo = []
+    contadorSaludEnemigo = listaEnemigos.map((datosEnemigo) => {
+        return {
+            saludActualEnemigo: datosEnemigo.saludActualEnemigo,
+            saludEnemigo: datosEnemigo.saludEnemigo,
+        }
+    });
+
+    console.table(contadorSaludEnemigo)
 
     pantallaCentral.innerHTML = `
     <div class="row">
@@ -700,9 +732,18 @@ function Combate() {
 
     let displayEnemigos = document.getElementById("tablaCombate");
     for (let enemigo of listaEnemigos) {
-        displayEnemigos.innerHTML += `<div class="d-flex detectarEnemigo">${enemigo.imagenEnemigo}</div>`;
+        displayEnemigos.innerHTML += `<div class="d-flex detectarEnemigo">${enemigo.imagenEnemigo} </div> <div class="detectarVidaEnemigo"></div>`;
     }
 
+    actualizarVidaEnemigo();
+
+    function actualizarVidaEnemigo() {
+        console.log("Actualizando vida")
+        let displayVida = document.querySelectorAll(`.detectarVidaEnemigo`)
+        for (let i = 0; i < contadorSaludEnemigo.length; i++) {
+            displayVida[i].innerHTML = `${contadorSaludEnemigo[i].saludActualEnemigo} / ${contadorSaludEnemigo[i].saludEnemigo}`
+        }
+    }
 
 
     let asignarEnemigos = document.getElementsByClassName("detectarEnemigo");
@@ -711,93 +752,165 @@ function Combate() {
         enemigoAsignado.setAttribute("id", `enemigo${i + 1}`);
     }
 
-    let contadorSaludEnemigo = listaEnemigos.map((datosEnemigo) => {
-        return {
-            saludActualEnemigo = datosEnemigo.saludActualEnemigo,
-            saludEnemigo = datosEnemigo.saludEnemigo,
-        }
-    });
-};
-
-
-
-detectarRonda();
-
-function detectarRonda() {
-    if (rondaActual === 0) {
-        turnoJugador();
-    } else if (rondaActual === ordenCombate.length) {
-        rondaActual = 0;
-        console.log("Es tu turno");
-        if (listaEnemigos.length == 0) {
-            alert("GANASTE")
-        }
-    } else {
-        let enemigoActual = ordenCombate[rondaActual - 1];
-        turnoEnemigo(enemigoActual);
-    }
-}
-
-function turnoJugador() {
-    for (let i = 0; i < asignarEnemigos.length; i++) {
-        let cuadriculaEnemigo = asignarEnemigos[i];
-        let enemigo = listaEnemigos[i];
-        if (enemigo.saludActualEnemigo > 0) {
-            const handler = () => {
-                console.log(`Atacaste a ${enemigo.nombreEnemigo}`);
-                ataqueJugador(enemigo);
-                detectarRonda();
-                cuadriculaEnemigo.removeEventListener('click', handler);
-            }
-            cuadriculaEnemigo.addEventListener("click", handler);
-        }
-    }
-}
-
-let imagenMuerte = `<img src="./img/objeto.png">`
-
-function ataqueJugador(enemigo) {
-    let ataque = parseInt(slotArma[0].danio + slotArma[0].habilidadUsada)
-    console.log(`Atacaste a ${enemigo.nombreEnemigo} con ${ataque} de daño`);
-    enemigo.saludActualEnemigo -= ataque;
-    console.log(`${enemigo.nombreEnemigo} tiene ahora ${enemigo.saludActualEnemigo} de salud`);
-    rondaActual++;
-    if (enemigo.saludActualEnemigo <= 0) {
-        enemigo.saludActualEnemigo = 0
-        console.table(enemigo)
-        console.log(imagenMuerte)
-        muerteEnemigo(enemigo)
-    }
-}
-
-function muerteEnemigo(enemigo) {
-    let enemigoMuerto = listaEnemigos.indexOf(enemigo);
-    listaEnemigos.splice(enemigoMuerto, 1)
-    ordenCombate.splice(enemigoMuerto, 1)
-}
-
-
-function turnoEnemigo(enemigo) {
-    console.log(`El enemigo ${enemigo.nombreEnemigo} atacó`);
-    vidaActual -= enemigo.ataqueEnemigo - jugador.defensa;
-    console.log(`Tu personaje tiene ahora ${vidaActual} de salud.`);
-    rondaActual++;
     detectarRonda();
+
+    function detectarRonda() {
+        if (rondaActual === 0) {
+            turnoJugador();
+        } else if (rondaActual === ordenCombate.length) {
+            rondaActual = 0;
+            console.log("Es tu turno");
+            if (listaEnemigos.length == 0) {
+                actualizarVidaEnemigo()
+                darloot()
+
+            }
+        } else {
+            let enemigoActual = ordenCombate[rondaActual - 1];
+            turnoEnemigo(enemigoActual);
+        }
+    }
+
+    function turnoJugador() {
+        for (let i = 0; i < asignarEnemigos.length; i++) {
+            let cuadriculaEnemigo = asignarEnemigos[i];
+            let enemigo = listaEnemigos[i];
+            if (enemigo.saludActualEnemigo > 0) {
+                const handler = () => {
+                    console.log(`Atacaste a ${enemigo.nombreEnemigo}`);
+                    ataqueJugador(enemigo);
+                    contadorSaludEnemigo[i].saludActualEnemigo = enemigo.saludActualEnemigo
+                    detectarRonda();
+                    cuadriculaEnemigo.removeEventListener('click', handler);
+                    cuadriculaEnemigo.classList.remove("enemigoAtacable")
+                }
+                cuadriculaEnemigo.addEventListener("click", handler);
+                cuadriculaEnemigo.classList.add("enemigoAtacable")
+
+            }
+        }
+    }
+
+
+    function ataqueJugador(enemigo) {
+        let ataque = parseInt(slotArma[0].danio + slotArma[0].habilidadUsada)
+        console.log(`Atacaste a ${enemigo.nombreEnemigo} con ${ataque} de daño`);
+        enemigo.saludActualEnemigo -= ataque;
+        console.log(`${enemigo.nombreEnemigo} tiene ahora ${enemigo.saludActualEnemigo} de salud`);
+        rondaActual++;
+        if (enemigo.saludActualEnemigo <= 0) {
+            enemigo.saludActualEnemigo = 0
+            console.table(enemigo)
+            muerteEnemigo(enemigo)
+        }
+        actualizarVidaEnemigo()
+    }
+
+    function muerteEnemigo(enemigo) {
+        let enemigoMuerto = listaEnemigos.indexOf(enemigo);
+        listaEnemigos.splice(enemigoMuerto, 1)
+        ordenCombate.splice(enemigoMuerto, 1)
+    }
+
+
+    function turnoEnemigo(enemigo) {
+        console.log(`El enemigo ${enemigo.nombreEnemigo} atacó`);
+        actualizarVidaEnemigo();
+        danioRecibido = enemigo.ataqueEnemigo - personaje.defensa;
+        console.log(danioRecibido)
+        if (danioRecibido == 0) { danioRecibido = 1 };
+        vidaActual -= danioRecibido
+        revisarVida()
+        console.log(`Tu personaje tiene ahora ${vidaActual} de salud.`);
+        rondaActual++;
+        detectarRonda();
+    }
+
+
 }
 
-console.log(rondaActual)
-}
-
+combateGanado = false
 
 
 
 
 function encuentro1() {
+
     jugador = personaje;
     listaEnemigos = [lobo1, lobo2, bandido1, lobo3]
 
     Combate()
+    darloot = () => {
+        lootCombate(pocionSalud, pocionSalud, manzana)
+        return combateGanado = false
+    }
 }
 
+
+function lootCombate(objeto1, objeto2, objeto3) {
+    pantallaCentral.innerHTML = 
+    `<div class= "row">
+    <div class="col-4"></div>
+    <div id="mensajeLoot">
+    <h5>Has conseguido los siguientes objetos:</h5> 
+    <p>${objeto1.nombre}</p>
+    <p>${objeto2.nombre}</p> 
+    <p>${objeto3.nombre}</p> 
+    <button id="aceptarLoot">Aceptar</button>
+    </div> 
+    <div "class=col-4"></div>
+    </div>`
+    inventario.push(objeto1, objeto2, objeto3)
+
+
+let lootAceptado = document.getElementById("aceptarLoot");
+lootAceptado.onclick = () => {
+    pantallaCentral.innerHTML = ""
+    checkpoint++
+    detectarCheckpoint()
+}
+}
+
+let checkpoint = 0
+
+function detectarCheckpoint() {
+    if (checkpoint == 1){
+        checkpoint1()
+    }
+    if (checkpoint == 2){
+        //checkpoint2()
+    }
+    if (checkpoint == 3){
+       //checkpoint3()
+    }
+}
+
+function checkpoint1 () {
+    let explorarBosque2 = document.createElement("button")
+        explorarBosque2.innerText = "Explorar el bosque"
+
+        mostrarBoton = document.getElementById("ubicacionBotonExplorar")
+        mostrarBoton.appendChild(explorarBosque2)
+
+        explorarBosque2.onclick = () => {
+            encuentro2()
+            mostrarBoton.removeChild(explorarBosque2)
+        }
+    }
+
+
+
+    function encuentro2() {
+        listaEnemigos = [lobo1, bandido1, bandido2, zombie]
+        listaEnemigos.forEach(enemigo => {
+            enemigo.saludActualEnemigo = enemigo.saludEnemigo
+        });
+    
+        Combate()
+        darloot = () => {
+            lootCombate(manzana, manzana, manzana)
+            return combateGanado = false
+        }
+    }
 
 game()
