@@ -3,7 +3,7 @@ let aplicarFondo = document.getElementById("pantallaJuego");
 let nombrePersonaje = "";
 let botonComenzar = document.getElementById("botonComenzar");
 let inicioJuego = document.getElementById("pantallaPrincipal");
-
+let juegoTerminado = false
 
 function game() {
     botonComenzar.onclick = () => {
@@ -213,12 +213,17 @@ function comenzarAventura() {
 
     function iniciarRevisarVida() {
         const intervaloVida = setInterval(() => {
+            if (juegoTerminado == true) {
+                clearInterval(intervaloVida)}
+
+            if (juegoTerminado == false){
             if (vidaActual >= 1) {
                 revisarVida()
             } else {
                 clearInterval(intervaloVida)
                 muerte()
             }
+        }
         }, 200)
         inicioJuego.innerHTML = `
     <div class=" d-flex justify-content-between" id="pantallaSuperior">
@@ -682,7 +687,8 @@ let lobo2 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let lobo3 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let bandido1 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
 let bandido2 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
-let zombie = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
+let zombie1 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
+let zombie2 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
 //const enemigoVacio = new Enemigo ("", 0, 0 , 0)
 
 
@@ -825,8 +831,8 @@ function encuentro1() {
 
 
 function lootCombate(objeto1, objeto2, objeto3) {
-    pantallaCentral.innerHTML = 
-    `<div class= "row">
+    pantallaCentral.innerHTML =
+        `<div class= "row">
     <div class="col-4"></div>
     <div id="mensajeLoot">
     <h5>Has conseguido los siguientes objetos:</h5> 
@@ -840,54 +846,112 @@ function lootCombate(objeto1, objeto2, objeto3) {
     inventario.push(objeto1, objeto2, objeto3)
 
 
-let lootAceptado = document.getElementById("aceptarLoot");
-lootAceptado.onclick = () => {
-    pantallaCentral.innerHTML = ""
-    checkpoint++
-    detectarCheckpoint()
-}
+    let lootAceptado = document.getElementById("aceptarLoot");
+    lootAceptado.onclick = () => {
+        pantallaCentral.innerHTML = ""
+        checkpoint++
+        detectarCheckpoint()
+    }
 }
 
-let checkpoint = 0
+let checkpoint = 1
 
 function detectarCheckpoint() {
-    if (checkpoint == 1){
-        checkpoint1()
+    if (checkpoint == 2) {
+        checkpoint2()
     }
-    if (checkpoint == 2){
-        //checkpoint2()
+    if (checkpoint == 3) {
+        checkpoint3()
     }
-    if (checkpoint == 3){
-       //checkpoint3()
+    if (checkpoint == 4) {
+        //checkpoint4()
     }
 }
 
-function checkpoint1 () {
+function checkpoint2() {
     let explorarBosque2 = document.createElement("button")
-        explorarBosque2.innerText = "Explorar el bosque"
+    explorarBosque2.innerText = "Explorar el bosque"
 
-        mostrarBoton = document.getElementById("ubicacionBotonExplorar")
-        mostrarBoton.appendChild(explorarBosque2)
+    mostrarBoton = document.getElementById("ubicacionBotonExplorar")
+    mostrarBoton.appendChild(explorarBosque2)
 
-        explorarBosque2.onclick = () => {
-            encuentro2()
-            mostrarBoton.removeChild(explorarBosque2)
-        }
+    explorarBosque2.onclick = () => {
+        encuentro2()
+        mostrarBoton.removeChild(explorarBosque2)
     }
+}
 
 
 
-    function encuentro2() {
-        listaEnemigos = [lobo1, bandido1, bandido2, zombie]
-        listaEnemigos.forEach(enemigo => {
-            enemigo.saludActualEnemigo = enemigo.saludEnemigo
-        });
+function encuentro2() {
+    listaEnemigos = [lobo1, bandido1, bandido2, zombie1]
+    listaEnemigos.forEach(enemigo => {
+        enemigo.saludActualEnemigo = enemigo.saludEnemigo
+    });
+
+    Combate()
+    darloot = () => {
+        lootCombate(manzana, manzana, manzana)
+        return combateGanado = false
+    }
+}
+
+function checkpoint3() {
+    let explorarBosque3 = document.createElement("button")
+    explorarBosque3.innerText = "Enfrentar al rey Esqueleto"
+
+    mostrarBoton = document.getElementById("ubicacionBotonExplorar")
+    mostrarBoton.appendChild(explorarBosque3)
+
+    explorarBosque3.onclick = () => {
+        encuentro3()
+        mostrarBoton.removeChild(explorarBosque3)
+    }
+}
+
+function encuentro3() {
+    listaEnemigos = [zombie1, bandido1, bandido2, zombie2]
+    listaEnemigos.forEach(enemigo => {
+        enemigo.saludActualEnemigo = enemigo.saludEnemigo
+    });
+
+    Combate()
+    darloot = () => {
+        juegoTerminado = true
+        creditos()
+    }
+}
+
+function creditos () {
+        inicioJuego.innerHTML = `
+                <div id="pantallaSuperior">
     
-        Combate()
-        darloot = () => {
-            lootCombate(manzana, manzana, manzana)
-            return combateGanado = false
-        }
-    }
+                    <h2 class= "text-center">Cumpliste tu destino</h2>
+                    
+                    </div>
+                    <div id="pantallaCentral">
 
+                    <p>Con el golpe final sobre el rey esqueleto, te declaras victorioso, puedes ver como grupos de muertos vivientes comienzan a aparecer entre los árboles, pero, al momento de tomar tu arma para combatirlos, notas que comienzan a arrodillarse ante tí. Y entonces lo comprendiste, las sombras te trajeron de vuelta, no para terminar con el reinado del campeón de los no muertos, sino para reemplazarlo. Y así será. Pues tu voluntad lentamente se pierde mientras tomas tu trofeo. La corona de huesos, que te conferirá el poder necesario para gobernar esta tierra, como adalid de la muerte en la tierra de los vivos</p>
+                        
+                    <div class= "text-center row" id="menuPrincipal">
+                            <div class="col-4"></div>
+                            
+                                <div class="col-4">
+                                <button id="botonReintentar">Volver a jugar</button>
+                                </div>
+                            </div>
+                            <div class="col-4"></div> 
+                
+                        
+                        </div>
+                        `
+    
+        aplicarFondo.classList.remove("fondoJuego")
+        let botonReintentar = document.getElementById("botonReintentar");
+        botonReintentar.onclick = () => {
+            window.location.reload()
+        }
+        console.log(juegoTerminado)
+        return juegoTerminado
+}
 game()
