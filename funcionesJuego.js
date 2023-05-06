@@ -60,7 +60,6 @@ class claseElegible {
 //  claseElegida(nomClase,  hp,fue,def,agi, mana) 
 let personaje = new claseElegible(" ", 1, 1, 1, 1, 0);
 let guerrero = new claseElegible("guerrero", 25, 7, 3, 4, 0);
-let mago = new claseElegible("mago", 10, 2, 0, 2, 7);
 let ladron = new claseElegible("ladrón", 15, 4, 2, 9, 0);
 
 function mostrarMenuClase() {
@@ -88,20 +87,6 @@ function mostrarMenuClase() {
                 <button class="btn btn-primary" id= "seleccionGuerrero">Seleccionar</button>
             </div>
         </div>
-        
-        <div class="card col-2 personajeSeleccionable" style="width: 18rem;">
-            <img class="card-img-top" src="./img/mago.png" alt="Card image cap">
-        <div class="card-body estiloTarjeta">
-            <h5 class="card-title text-center">mago</h5>
-            <p class="card-text">
-                salud: 10 <br>
-                Fuerza: 2<br>
-                Armadura: 0<br>
-                Agilidad: 2<br>
-                Mana: 7</p>
-            <button class="btn btn-primary" id=seleccionMago>Seleccionar</button>
-        </div>
-    </div>
 
     <div class="card col-2 personajeSeleccionable" style="width: 18rem;">
         <img class="card-img-top" src="./img/ladrón.png" alt="Card image cap">
@@ -134,18 +119,14 @@ function mostrarMenuClase() {
             cambioIdClase()
             return idClase
         }
-        claseMago.onclick = () => {
+
+        claseLadron.onclick = () => {
             idClase = 2;
             cambioIdClase()
             return idClase
         }
-        claseLadron.onclick = () => {
-            idClase = 3;
-            cambioIdClase()
-            return idClase
-        }
         document.getElementById("seleccionCambioNombre").onclick = () => {
-            idClase = 4;
+            idClase = 3;
             cambioIdClase()
             return idClase
         }
@@ -159,14 +140,10 @@ function mostrarMenuClase() {
                 confirmar();
                 return personaje;
             case 2:
-                personaje = structuredClone(mago);
-                confirmar();
-                return personaje;
-            case 3:
                 personaje = structuredClone(ladron);
                 confirmar();
                 return personaje;
-            case 4:
+            case 3:
                 iniciarJuego()
                 break;
         }
