@@ -687,8 +687,9 @@ let lobo2 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let lobo3 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
 let bandido1 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
 let bandido2 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
-let zombie1 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
-let zombie2 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/objeto.png">`);
+let zombie1 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/zombie.png">`);
+let zombie2 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/zombie.png">`);
+let reyEsqueleto = new Enemigo("Rey Esqueleto", 30, 30, 5, 6, `<img src= "./img/reyEsqueleto.png">`)
 //const enemigoVacio = new Enemigo ("", 0, 0 , 0)
 
 
@@ -764,8 +765,10 @@ function Combate() {
                     ataqueJugador(enemigo);
                     contadorSaludEnemigo[i].saludActualEnemigo = enemigo.saludActualEnemigo
                     detectarRonda();
+                    if (contadorSaludEnemigo[i].saludActualEnemigo <=0){
                     cuadriculaEnemigo.removeEventListener('click', handler);
                     cuadriculaEnemigo.classList.remove("enemigoAtacable")
+                    }
                 }
                 cuadriculaEnemigo.addEventListener("click", handler);
                 cuadriculaEnemigo.classList.add("enemigoAtacable")
@@ -910,7 +913,7 @@ function checkpoint3() {
 }
 
 function encuentro3() {
-    listaEnemigos = [zombie1, bandido1, bandido2, zombie2]
+    listaEnemigos = [zombie1, reyEsqueleto, zombie2]
     listaEnemigos.forEach(enemigo => {
         enemigo.saludActualEnemigo = enemigo.saludEnemigo
     });
