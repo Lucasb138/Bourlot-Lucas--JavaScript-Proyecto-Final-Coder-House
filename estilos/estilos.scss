@@ -20,9 +20,13 @@ body {
     color: white;
 }
 
+.instrucciones {
+    margin: 10px;
+}
+
 #pantallaJuego {
     background-color: rgba(39, 38, 39, 1);
-    height: 85vh;
+    height: 540px;
 
     h2 {
         margin-top: 20px;
@@ -45,15 +49,32 @@ body {
 
 #pantallaCentralMenu{
     height: auto;
-    #menuPrincipal p{
+    #botonComenzar{
     background-color: rgb(168, 135, 27);
     font-size: 20px;
     border: 1px solid rgb(236, 236, 236);
     }
+    #botonComenzar:hover {
+        color: gold;
+        font-weight: 500;
+        border: 1px solid gold;
+    }
 }
 
+#displayConsejo{
+    margin-top: 180px;
+    text-align: center;
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif
+}
 
-
+#volverAlMenu{
+    margin-top: 10px;
+    background-color: $colorBoton;
+}
+#volverAlMenu:hover{
+    color: white;
+}
 
 .borde {
     background-color: black;
@@ -74,6 +95,10 @@ body {
 #seleccionCambioNombre {
     margin-top: 10px;
     background-color: $colorBoton;
+}
+
+#seleccionCambioNombre:hover{
+    color: white;
 }
 
 #selectorPersonaje {
@@ -248,8 +273,19 @@ body {
     line-height: 60px;
 }
 
+
+.flexEnemigo {
+    flex-direction: column;
+    text-align: center;
+}
+
+
 .enemigoAtacable:hover{
-    border: 1px solid red;
+    border: 1px solid green;
+}
+
+.enemigoAtacante {
+    border: 2px solid red;
 }
 
 #mensajeLoot{
@@ -259,8 +295,38 @@ body {
     padding-left: 15px;
 }
 
+
 #aceptarLoot{
     margin-left: 80%;
-    
+    background-color: $colorBoton;
+}
+
+#mensajeCheckpoint{
+    width: 50%;
+    background-color: $colorPagina;
+    border: 1px solid gray;
+
+    button{
+        margin-bottom: 10px;
+    }
+
+    button:hover {
+        border: 1px solid gold;
+        color: gold;
+    }
+}
+
+#tomarArco {
+    width: 30%;
+    background-color: $colorBoton;
+}
+
+#no {
+    width: 30%;
+    margin-left: 30px;
+    background-color: rgb(80, 43, 12);
+}
+
+#botonReintentar {
     background-color: $colorBoton;
 }

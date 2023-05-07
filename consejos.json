@@ -1,0 +1,27 @@
+
+[{
+    "id":1,
+    "texto":"Los zombies son bestias tontas, pero muy fuertes y peligrosas"
+},
+
+{
+    "id":2,
+    "texto":"El arco es el arma más fuerte del juego"
+},
+
+{
+    "id":3,
+    "texto": "Consumir pociones no te hará perder tu turno, puedes hacerlo cuando quieras y cuantas veces quieras"
+},
+
+{
+    "id":4,
+    "texto": "Los guerreros tienen más armadura, mientras que los ladrones hacen más daño"
+},
+
+{
+    "id":5,
+    "texto": "No todos los enemigos hacen el mismo daño, prioriza a los más fuertes primero"
+}
+
+]

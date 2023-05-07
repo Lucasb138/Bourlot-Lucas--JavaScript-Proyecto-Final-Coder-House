@@ -5,6 +5,8 @@ let botonComenzar = document.getElementById("botonComenzar");
 let inicioJuego = document.getElementById("pantallaPrincipal");
 let juegoTerminado = false
 
+obtenerJSON()
+
 function game() {
     botonComenzar.onclick = () => {
         iniciarJuego();
@@ -13,8 +15,8 @@ function game() {
 
 function iniciarJuego() {
     inicioJuego.innerHTML =
-        `<div id="pantallaSuperior">
-            <h3 class= "text-center">Elige el nombre de tu personaje</h3>
+        `<div id="pantallaSuperior"> <button id= "volverAlMenu">Volver al menú principal</button>
+        <h4 class= "text-center">Elige el nombre de tu personaje</h4>
         </div>
         <div id="#pantallaCentralMenu">
             <div class= "text-center row" id="menuPrincipal">
@@ -22,21 +24,31 @@ function iniciarJuego() {
                 <div class="col-6">
                     <div>
                     <form>
-                    <input id="ingresarNombre" type="text" placeholder: " ">
+                    <input id="ingresarNombre" type="text">
                     </form>
                     </div>
                     <button id="aceptarNombre">Aceptar</button>
                 </div>
                 <div class="col-3"></div> 
             </div>
-        </div>`;
+        </div>`
 
     let botonAceptarNombre = document.getElementById("aceptarNombre");
+    let botonVolverMenu = document.getElementById("volverAlMenu")
+
+    botonVolverMenu.onclick = () => window.location.reload();
+
 
     botonAceptarNombre.onclick = () => {
         nombrePersonaje = document.getElementById("ingresarNombre").value;
         if (nombrePersonaje == "" || nombrePersonaje == null || nombrePersonaje == " ") {
-            alert("Nombre invalido")
+            Toastify({
+                text: "Nombre inválido",
+                className: "info",
+                style: {
+                    background: "linear-gradient(to right, #0f2027, #203a43, #2c5364)",
+                }
+            }).showToast()
         } else {
             mostrarMenuClase();
         }
@@ -44,23 +56,38 @@ function iniciarJuego() {
 
 }
 
+async function obtenerJSON(){
+    const URLJSON = '/consejos.json';
+    const respuesta = await fetch(URLJSON);
+    const data = await respuesta.json();
+    consejos = data;
+    mostrarConsejo();
+    
+}
+function mostrarConsejo () {
+    elegirConsejo = Math.floor(Math.random()*(consejos.length))
+console.log (consejos.length)
+let consejoMostrado = [consejos[elegirConsejo].texto]
+console.log(consejoMostrado)
+    let displayConsejo = document.getElementById("displayConsejo")
+    displayConsejo.innerHTML = `Consejo: ${consejoMostrado} `
+}
 //Clases
 
 class claseElegible {
-    constructor(nombreClase, vida, fuerza, defensa, agilidad, mana) {
+    constructor(nombreClase, vida, fuerza, defensa, agilidad) {
         this.nombreClase = nombreClase
         this.vida = vida;
         this.fuerza = fuerza;
         this.defensa = defensa;
         this.agilidad = agilidad;
-        this.mana = mana;
 
     }
 }
-//  claseElegida(nomClase,  hp,fue,def,agi, mana) 
-let personaje = new claseElegible(" ", 1, 1, 1, 1, 0);
-let guerrero = new claseElegible("guerrero", 25, 7, 3, 4, 0);
-let ladron = new claseElegible("ladrón", 15, 4, 2, 9, 0);
+//  claseElegida(nomClase,  hp,fue,def,agi) 
+let personaje = new claseElegible(" ", 1, 1, 1, 1);
+let guerrero = new claseElegible("guerrero", 25, 7, 3, 4);
+let ladron = new claseElegible("ladrón", 15, 4, 2, 9);
 
 function mostrarMenuClase() {
 
@@ -81,7 +108,6 @@ function mostrarMenuClase() {
                 fuerza: 7 <br>
                 Armadura: 3 <br>
                 Agilidad: 4 <br>
-                mana: 0 <br>
                 </div>
                 </p>
                 <button class="btn btn-primary" id= "seleccionGuerrero">Seleccionar</button>
@@ -93,11 +119,13 @@ function mostrarMenuClase() {
     <div class="card-body estiloTarjeta">
         <h5 class="card-title text-center">ladrón</h5>
         <p class="card-text">
-            salud: 15 <br>
-            Fuerza: 4 <br>
-            Armadura: 2 <br>
-            Agilidad: 9 <br>
-            Mana: 0</p>
+        <div>
+        salud: 15 <br>
+        fuerza: 4 <br>
+        Armadura: 2 <br>
+        Agilidad: 9 <br>
+        </div>
+        </p>
         <button class="btn btn-primary" id= "seleccionLadron">Seleccionar</button>
     </div>
     </div>`
@@ -110,7 +138,6 @@ function mostrarMenuClase() {
 
     function elegirClase() {
         let claseGuerrero = document.getElementById("seleccionGuerrero");
-        let claseMago = document.getElementById("seleccionMago");
         let claseLadron = document.getElementById("seleccionLadron");
 
 
@@ -158,7 +185,7 @@ function mostrarMenuClase() {
 
 function confirmar() {
     inicioJuego.innerHTML =
-        `<div class="card col-2 personajeSeleccionable" style="width: 18rem;">
+        `<div class="card col-2 personajeSeleccionable" style="width: 18rem;  margin-top: 1rem;">
         <img class="card-img-top" src="./img/${personaje.nombreClase}.png" alt="Card image cap">
         <div class="card-body estiloTarjeta">
         <h5 class="card-title text-center">${personaje.nombreClase}</h5>
@@ -167,7 +194,6 @@ function confirmar() {
             Fuerza: ${personaje.fuerza} <br>
             Armadura:${personaje.defensa} <br>
             Agilidad: ${personaje.agilidad} <br>
-            Mana: ${personaje.mana}</p>
         <button class="btn btn-primary" id= "cancelar">Cancelar</button>
         <button class="btn btn-primary" id= "aceptar">Jugar</button>
     </div>
@@ -178,8 +204,6 @@ function confirmar() {
         preludio();
         localStorage.setItem("datosPJCreado", JSON.stringify(personaje));
         const datoPJ = JSON.parse(localStorage.getItem("datosPJCreado"));
-        console.log(datoPJ)
-
     }
     let cancelar = document.getElementById("cancelar");
     cancelar.onclick = () => {
@@ -205,7 +229,6 @@ function preludio() {
 
 function comenzarAventura() {
     vidaActual = personaje.vida
-    manaActual = personaje.mana
     iniciarRevisarVida();
 
 
@@ -214,16 +237,17 @@ function comenzarAventura() {
     function iniciarRevisarVida() {
         const intervaloVida = setInterval(() => {
             if (juegoTerminado == true) {
-                clearInterval(intervaloVida)}
-
-            if (juegoTerminado == false){
-            if (vidaActual >= 1) {
-                revisarVida()
-            } else {
                 clearInterval(intervaloVida)
-                muerte()
             }
-        }
+
+            if (juegoTerminado == false) {
+                if (vidaActual >= 1) {
+                    revisarVida()
+                } else {
+                    clearInterval(intervaloVida)
+                    muerte()
+                }
+            }
         }, 200)
         inicioJuego.innerHTML = `
     <div class=" d-flex justify-content-between" id="pantallaSuperior">
@@ -254,8 +278,11 @@ function comenzarAventura() {
                 
             </div>
             
-            <div class= "d-flex cuadriculaArmaEquipada" id = "armaEquipada">ARMA</div>
-            <div class="col-2" id="ubicacionBotonExplorar"></div>
+            <div class= "d-flex cuadriculaArmaEquipada" id = "armaEquipada"></div>
+            <div class="col-2" id="ubicacionBotonExplorar">
+            <div class="col-2" id= "DañoJugador"></div>
+            
+
             
         </div>
 
@@ -266,6 +293,7 @@ function comenzarAventura() {
 
         let explorarBosque = document.createElement("button")
         explorarBosque.innerText = "Explorar el bosque"
+        explorarBosque.append()
 
         let mostrarBoton = document.getElementById("ubicacionBotonExplorar")
         mostrarBoton.appendChild(explorarBosque)
@@ -366,8 +394,6 @@ function usarObjeto() {
         objeto = objetoUsado;
         vidaActual = vidaActual + objeto.efectoSalud
         remover(objeto)
-    } else {
-        console.log("Tu vida ya está al máximo")
     }
 }
 
@@ -393,6 +419,7 @@ let slotArma = []
 
 
 
+
 //Armas
 
 
@@ -412,19 +439,19 @@ class armaInventario {
 
 function DarArmaInicial() {
 
-    let espadaBasica = new armaInventario(001, "Espada", 5, personaje.fuerza, 15, `Espada básica, que todo aventurero novato carga. Daño= 5 + ${personaje.fuerza}`, `<img src="./img/espada.png"></img>`)
-    let varitaMagica = new armaInventario(002, "varita mágica", 10, personaje.mana, 60, "Una varita mágica de mago aprendiz, dispara chispas ardientes. Daño= 10. Consume 1 de maná por uso", `<img src="./img/varitaMagica.png">`)
-    let daga = new armaInventario(003, "daga", 2, personaje.agilidad, 10, `Una daga, especial para encuentros cercanos. Daño = 2 + ${personaje.agilidad}`, `<img src="./img/daga.png">`,)
+    let espadaBasica = new armaInventario(001, "Espada", 2, personaje.fuerza, 15, `Una espada, no es perfecta, pero hace el trabajo. Daño= ${personaje.fuerza + 2} (2 + fuerza)`, `<img src="./img/espada.png"></img>`)
+    let arco = new armaInventario(002, "arco", 6, personaje.agilidad, 60, `Un arco, Daño = ${personaje.agilidad + 6} (6 + agilidad)`, `<img src="./img/arco.png">`)
+    let daga = new armaInventario(003, "daga", 2, personaje.agilidad, 10, `Una daga, especial para encuentros cercanos. Daño = ${personaje.agilidad + 2} (2 + agilidad)`, `<img src="./img/daga.png">`,)
 
     if (personaje.nombreClase == "guerrero") {
         inventario.push(espadaBasica);
-    } else if (personaje.nombreClase == "mago") {
-        inventario.push(varitaMagica);
     } else if (personaje.nombreClase == "ladrón") {
         inventario.push(daga);
     }
     slotArma.push(inventario[1])
     armaEquipada.innerHTML = `${slotArma[0].imagen}`
+
+    return armasJuego = [espadaBasica, arco, daga]
 }
 
 //VIDA:
@@ -443,35 +470,9 @@ function revisarVida() {
     barraVida.style.width = `${Math.floor(porcentajeVida)}%`;
     barraVida.innerText = `${vidaActual}/${personaje.vida}`
     barraVida.style.backgroundColor = `red`
-
-
 }
-function revisarMana() {
-
-    porcentajeMana = Math.floor((manaActual / (personaje.mana)) * 100);
-
-    if (manaActual > personaje.mana) {
-        manaActual = personaje.mana;
-    }
-    if (vidaActual <= 0) {
-        muerte()
-    }
-
-    const barraMana = document.getElementById("barraMana");
-    barraMana.style.width = `${Math.floor(porcentajeMana)}%`;
-    barraMana.innerText = `${manaActual}/${personaje.mana}`;
-    barraMana.style.backgroundColor = "blue"
-
-
-    if (personaje.nombreClase != "mago") {
-        barraMana.style.width = `100%`;
-        barraMana.innerText = `No posees magia`;
-    }
-};
-
 
 let vidaActual = 1;
-let manaActual = personaje.mana;
 let menuMostrarStats = ""
 let menuMostrarInventario = ""
 function mostrarStats() {
@@ -487,13 +488,11 @@ function mostrarStats() {
     <th>Fuerza</th> 
     <th>Armadura</th>
     <th>Agilidad</th>
-    <th>Mana</th>
     </tr>
     <tr>
     <td>${personaje.fuerza}</td>
     <td>${personaje.defensa}</td>
     <td>${personaje.agilidad}</td>
-    <td>${personaje.mana}</td>
     </tr>
     </table>`
 
@@ -638,8 +637,6 @@ function mostrarInventario() {
                         itemClickeado = inventarioMostrado[i]
                         usarObjeto()
                         break;
-                    default:
-                        console.log("Sin interacción")
                 }
             }
         })
@@ -671,27 +668,24 @@ function ocultarInventario() {
 
 
 class Enemigo {
-    constructor(nombreEnemigo, saludActualEnemigo, saludEnemigo, ataqueEnemigo, defensaEnemigo, imagenEnemigo) {
+    constructor(nombreEnemigo, saludActualEnemigo, saludEnemigo, ataqueEnemigo, imagenEnemigo) {
         this.nombreEnemigo = nombreEnemigo;
         this.saludActualEnemigo = saludActualEnemigo
         this.saludEnemigo = saludEnemigo;
         this.ataqueEnemigo = ataqueEnemigo;
-        this.defensaEnemigo = defensaEnemigo;
         this.imagenEnemigo = imagenEnemigo;
     }
 }
 
 
-let lobo1 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
-let lobo2 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
-let lobo3 = new Enemigo("Lobo", 3, 3, 4, 0, `<img src="./img/lobo.png">`);
-let bandido1 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
-let bandido2 = new Enemigo(" bandido", 5, 5, 3, 3, `<img src= "./img/bandido.png">`);
-let zombie1 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/zombie.png">`);
-let zombie2 = new Enemigo("Zombie", 5, 5, 7, 1, `<img src= "./img/zombie.png">`);
-let reyEsqueleto = new Enemigo("Rey Esqueleto", 30, 30, 5, 6, `<img src= "./img/reyEsqueleto.png">`)
-//const enemigoVacio = new Enemigo ("", 0, 0 , 0)
-
+let lobo1 = new Enemigo("Lobo", 3, 3, 2, `<img src="./img/lobo.png">`);
+let lobo2 = new Enemigo("Lobo", 3, 3, 2, `<img src="./img/lobo.png">`);
+let lobo3 = new Enemigo("Lobo", 3, 3, 1, `<img src="./img/lobo.png">`);
+let bandido1 = new Enemigo(" bandido", 5, 5, 2, `<img src= "./img/bandido.png">`);
+let bandido2 = new Enemigo(" bandido", 10, 10, 2, `<img src= "./img/bandido.png">`);
+let zombie1 = new Enemigo("Zombie", 5, 10, 3, `<img src= "./img/zombie.png">`);
+let zombie2 = new Enemigo("Zombie", 5, 10, 4, `<img src= "./img/zombie.png">`);
+let reyEsqueleto = new Enemigo("Rey Esqueleto", 30, 30, 5, `<img src= "./img/reyEsqueleto.png">`)
 
 function Combate() {
     let ordenCombate = [...listaEnemigos, jugador];
@@ -702,30 +696,39 @@ function Combate() {
         return {
             saludActualEnemigo: datosEnemigo.saludActualEnemigo,
             saludEnemigo: datosEnemigo.saludEnemigo,
+            ataqueEnemigo: datosEnemigo.ataqueEnemigo
         }
     });
 
-    console.table(contadorSaludEnemigo)
 
     pantallaCentral.innerHTML = `
     <div class="row">
         <div class="col-12" id="menuCombate">
             <div class="d-flex justify-content-center align-items-center" id="tablaCombate"></div> 
-        </div> 
+        </div>
+        <div id="statsCombate"></div>
     </div>`;
 
     let displayEnemigos = document.getElementById("tablaCombate");
+    let displayStatsEnemigo = document.getElementById("statsCombate")
     for (let enemigo of listaEnemigos) {
-        displayEnemigos.innerHTML += `<div class="d-flex detectarEnemigo">${enemigo.imagenEnemigo} </div> <div class="detectarVidaEnemigo"></div>`;
+        displayEnemigos.innerHTML += `<div class= "detectarEnemigo">${enemigo.imagenEnemigo} </div> 
+        <div class="flexEnemigo">
+            <div class="detectarVidaEnemigo"></div> 
+            <div class="detectarDanioEnemigo"></div>
+        </div>`
     }
 
     actualizarVidaEnemigo();
 
     function actualizarVidaEnemigo() {
-        console.log("Actualizando vida")
         let displayVida = document.querySelectorAll(`.detectarVidaEnemigo`)
+        let displayDanio = document.querySelectorAll(`.detectarDanioEnemigo`)
         for (let i = 0; i < contadorSaludEnemigo.length; i++) {
             displayVida[i].innerHTML = `${contadorSaludEnemigo[i].saludActualEnemigo} / ${contadorSaludEnemigo[i].saludEnemigo}`
+            if (rondaActual > 1) {
+                displayDanio[i].innerHTML = `<img src= "../img/ataqueEnemigoIcono.png">${contadorSaludEnemigo[i].ataqueEnemigo}`
+            }
         }
     }
 
@@ -743,7 +746,6 @@ function Combate() {
             turnoJugador();
         } else if (rondaActual === ordenCombate.length) {
             rondaActual = 0;
-            console.log("Es tu turno");
             if (listaEnemigos.length == 0) {
                 actualizarVidaEnemigo()
                 darloot()
@@ -761,13 +763,12 @@ function Combate() {
             let enemigo = listaEnemigos[i];
             if (enemigo.saludActualEnemigo > 0) {
                 const handler = () => {
-                    console.log(`Atacaste a ${enemigo.nombreEnemigo}`);
                     ataqueJugador(enemigo);
                     contadorSaludEnemigo[i].saludActualEnemigo = enemigo.saludActualEnemigo
                     detectarRonda();
-                    if (contadorSaludEnemigo[i].saludActualEnemigo <=0){
-                    cuadriculaEnemigo.removeEventListener('click', handler);
-                    cuadriculaEnemigo.classList.remove("enemigoAtacable")
+                    if (contadorSaludEnemigo[i].saludActualEnemigo <= 0) {
+                        cuadriculaEnemigo.removeEventListener('click', handler);
+                        cuadriculaEnemigo.classList.remove("enemigoAtacable")
                     }
                 }
                 cuadriculaEnemigo.addEventListener("click", handler);
@@ -780,13 +781,10 @@ function Combate() {
 
     function ataqueJugador(enemigo) {
         let ataque = parseInt(slotArma[0].danio + slotArma[0].habilidadUsada)
-        console.log(`Atacaste a ${enemigo.nombreEnemigo} con ${ataque} de daño`);
         enemigo.saludActualEnemigo -= ataque;
-        console.log(`${enemigo.nombreEnemigo} tiene ahora ${enemigo.saludActualEnemigo} de salud`);
         rondaActual++;
         if (enemigo.saludActualEnemigo <= 0) {
             enemigo.saludActualEnemigo = 0
-            console.table(enemigo)
             muerteEnemigo(enemigo)
         }
         actualizarVidaEnemigo()
@@ -799,15 +797,15 @@ function Combate() {
     }
 
 
+
+
+
     function turnoEnemigo(enemigo) {
-        console.log(`El enemigo ${enemigo.nombreEnemigo} atacó`);
         actualizarVidaEnemigo();
         danioRecibido = enemigo.ataqueEnemigo - personaje.defensa;
-        console.log(danioRecibido)
-        if (danioRecibido == 0) { danioRecibido = 1 };
+        if (danioRecibido < 1) { danioRecibido = 1 };
         vidaActual -= danioRecibido
         revisarVida()
-        console.log(`Tu personaje tiene ahora ${vidaActual} de salud.`);
         rondaActual++;
         detectarRonda();
     }
@@ -828,33 +826,38 @@ function encuentro1() {
     Combate()
     darloot = () => {
         lootCombate(pocionSalud, pocionSalud, manzana)
-        return combateGanado = false
+            .then((checkpoint) => {
+                combateGanado = false
+            })
     }
 }
 
 
 function lootCombate(objeto1, objeto2, objeto3) {
-    pantallaCentral.innerHTML =
-        `<div class= "row">
-    <div class="col-4"></div>
-    <div id="mensajeLoot">
-    <h5>Has conseguido los siguientes objetos:</h5> 
-    <p>${objeto1.nombre}</p>
-    <p>${objeto2.nombre}</p> 
-    <p>${objeto3.nombre}</p> 
-    <button id="aceptarLoot">Aceptar</button>
-    </div> 
-    <div "class=col-4"></div>
-    </div>`
-    inventario.push(objeto1, objeto2, objeto3)
+    return new Promise((resolve, reject) => {
+        pantallaCentral.innerHTML =
+            `<div class= "row">
+            <div class="col-4"></div>
+            <div id="mensajeLoot">
+            <h5>Has conseguido los siguientes objetos:</h5> 
+            <p>${objeto1.nombre}</p>
+            <p>${objeto2.nombre}</p> 
+            <p>${objeto3.nombre}</p> 
+            <button id="aceptarLoot">Aceptar</button>
+            </div> 
+            <div class="col-4"></div>
+          </div>`;
 
+        inventario.push(objeto1, objeto2, objeto3);
 
-    let lootAceptado = document.getElementById("aceptarLoot");
-    lootAceptado.onclick = () => {
-        pantallaCentral.innerHTML = ""
-        checkpoint++
-        detectarCheckpoint()
-    }
+        let lootAceptado = document.getElementById("aceptarLoot");
+        lootAceptado.onclick = () => {
+            pantallaCentral.innerHTML = "";
+            checkpoint++;
+            detectarCheckpoint();
+            resolve(checkpoint);
+        };
+    });
 }
 
 let checkpoint = 1
@@ -866,21 +869,48 @@ function detectarCheckpoint() {
     if (checkpoint == 3) {
         checkpoint3()
     }
-    if (checkpoint == 4) {
-        //checkpoint4()
-    }
+}
+
+function recogerArco() {
+    arco = armasJuego[1]
+    inventario.push(arco)
 }
 
 function checkpoint2() {
-    let explorarBosque2 = document.createElement("button")
-    explorarBosque2.innerText = "Explorar el bosque"
+    pantallaCentral.innerHTML =
+        `<div class= "row">
+    <div class="col-2"></div>
+    <div class= "col-8" id="mensajeCheckpoint">
+    <h5>El soldado muerto</h5>
+    <p>Encuentras un soldado muerto, su escudo está roto, pero reconoces su símbolo, es un soldado de la realeza, sientes cierto vínculo ¿Quizás serviste a algún reino antes de morir? También encuentras un arco, fabricado con aurumplast, un metal dorado de caracteristicas similares al oro, pero con una mayor flexibilidad y resistencia. En manos capaces, este arco podría ser devastador ¿Deseas tomarlo?</p>
+    <button id= "tomarArco">Sí (Añadir al inventario)</button> <button id=no>No (Seguir tu camino)</button>
+    </div>
+    <div class="col-2"></div>
+    </div>`
 
-    mostrarBoton = document.getElementById("ubicacionBotonExplorar")
-    mostrarBoton.appendChild(explorarBosque2)
+    let tomarArco = document.getElementById("tomarArco")
+    tomarArco.onclick = () => {
+        recogerArco();
+        pantallaCentral.innerHTML = "";
+        eventoArcoResuelto();
+    }
 
-    explorarBosque2.onclick = () => {
-        encuentro2()
-        mostrarBoton.removeChild(explorarBosque2)
+    document.getElementById("no").onclick = () => {
+        pantallaCentral.innerHTML = "";
+        eventoArcoResuelto()
+    }
+
+    function eventoArcoResuelto() {
+        let explorarBosque2 = document.createElement("button")
+        explorarBosque2.innerText = "Explorar el bosque"
+
+        mostrarBoton = document.getElementById("ubicacionBotonExplorar")
+        mostrarBoton.appendChild(explorarBosque2)
+
+        explorarBosque2.onclick = () => {
+            encuentro2()
+            mostrarBoton.removeChild(explorarBosque2)
+        }
     }
 }
 
@@ -894,8 +924,10 @@ function encuentro2() {
 
     Combate()
     darloot = () => {
-        lootCombate(manzana, manzana, manzana)
-        return combateGanado = false
+        lootCombate(pocionSalud, pocionSaludSuprema, manzana)
+            .then((checkpoint) => {
+                combateGanado = false
+            })
     }
 }
 
@@ -921,12 +953,12 @@ function encuentro3() {
     Combate()
     darloot = () => {
         juegoTerminado = true
-        creditos()
+        epilogo()
     }
 }
 
-function creditos () {
-        inicioJuego.innerHTML = `
+function epilogo() {
+    inicioJuego.innerHTML = `
                 <div id="pantallaSuperior">
     
                     <h2 class= "text-center">Cumpliste tu destino</h2>
@@ -948,13 +980,12 @@ function creditos () {
                         
                         </div>
                         `
-    
-        aplicarFondo.classList.remove("fondoJuego")
-        let botonReintentar = document.getElementById("botonReintentar");
-        botonReintentar.onclick = () => {
-            window.location.reload()
-        }
-        console.log(juegoTerminado)
-        return juegoTerminado
+
+    aplicarFondo.classList.remove("fondoJuego")
+    let botonReintentar = document.getElementById("botonReintentar");
+    botonReintentar.onclick = () => {
+        window.location.reload()
+    }
+    return juegoTerminado
 }
 game()
