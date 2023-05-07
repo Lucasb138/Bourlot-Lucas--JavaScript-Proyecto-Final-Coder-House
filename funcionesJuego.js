@@ -14,7 +14,7 @@ function game() {
 }
 
 async function obtenerJSON(){
-    const URLJSON = '/consejos.json';
+    const URLJSON = "./consejos.json";
     const respuesta = await fetch(URLJSON);
     const data = await respuesta.json();
     consejos = data;
