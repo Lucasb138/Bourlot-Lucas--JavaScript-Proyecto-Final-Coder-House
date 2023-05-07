@@ -13,49 +13,6 @@ function game() {
     }
 }
 
-function iniciarJuego() {
-    inicioJuego.innerHTML =
-        `<div id="pantallaSuperior"> <button id= "volverAlMenu">Volver al menú principal</button>
-        <h4 class= "text-center">Elige el nombre de tu personaje</h4>
-        </div>
-        <div id="#pantallaCentralMenu">
-            <div class= "text-center row" id="menuPrincipal">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <div>
-                    <form>
-                    <input id="ingresarNombre" type="text">
-                    </form>
-                    </div>
-                    <button id="aceptarNombre">Aceptar</button>
-                </div>
-                <div class="col-3"></div> 
-            </div>
-        </div>`
-
-    let botonAceptarNombre = document.getElementById("aceptarNombre");
-    let botonVolverMenu = document.getElementById("volverAlMenu")
-
-    botonVolverMenu.onclick = () => window.location.reload();
-
-
-    botonAceptarNombre.onclick = () => {
-        nombrePersonaje = document.getElementById("ingresarNombre").value;
-        if (nombrePersonaje == "" || nombrePersonaje == null || nombrePersonaje == " ") {
-            Toastify({
-                text: "Nombre inválido",
-                className: "info",
-                style: {
-                    background: "linear-gradient(to right, #0f2027, #203a43, #2c5364)",
-                }
-            }).showToast()
-        } else {
-            mostrarMenuClase();
-        }
-    };
-
-}
-
 async function obtenerJSON(){
     const URLJSON = '/consejos.json';
     const respuesta = await fetch(URLJSON);
@@ -66,11 +23,84 @@ async function obtenerJSON(){
 }
 function mostrarConsejo () {
     elegirConsejo = Math.floor(Math.random()*(consejos.length))
-console.log (consejos.length)
-let consejoMostrado = [consejos[elegirConsejo].texto]
-console.log(consejoMostrado)
+let consejoMostrado = consejos[elegirConsejo].texto
     let displayConsejo = document.getElementById("displayConsejo")
     displayConsejo.innerHTML = `Consejo: ${consejoMostrado} `
+}
+
+
+function iniciarJuego() {
+    inicioJuego.innerHTML =
+        `<div id="pantallaSuperior">
+            <button id="volverAlMenu">Volver al menú principal</button>
+            <h4 class="text-center">Elige el nombre de tu personaje</h4>
+        </div>
+        <div id="pantallaCentralMenu">
+            <div class="text-center row" id="menuPrincipal">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <div>
+                        <form id="formulario">
+                            <input id="ingresarNombre" type="text">
+                            <input type="submit" value="Aceptar">
+                        </form>
+                    </div>
+                </div>
+                <div class="col-3"></div> 
+            </div>
+        </div>`;
+
+    let botonVolverMenu = document.getElementById("volverAlMenu");
+    botonVolverMenu.onclick = () => window.location.reload();
+
+    //Validación del formulario:
+    let nombreingresado = document.getElementById("ingresarNombre");
+    let formulario = document.getElementById("formulario");
+
+    const caracteresValidosNombre = pattern= /[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+/
+    
+    function mensajeError (mensaje){
+        Toastify({
+            text: mensaje,
+            className: "info",
+            style: {
+                background: "linear-gradient(to right, #0f2027, #203a43, #2c5364)",
+            }
+        }).showToast();
+    }
+
+    formulario.addEventListener("submit", (e) =>  {
+        e.preventDefault();
+        let correcto = true;
+
+        let validarCaracteres = caracteresValidosNombre.test(nombreingresado.value)
+        if (!validarCaracteres){
+            mensaje = "Nombre inválido"
+            mensajeError (mensaje)
+            correcto = false
+
+        }else if (nombreingresado.value === "" || nombreingresado.value === null ) {
+            mensaje = "Nombre inválido"
+            mensajeError (mensaje)
+            correcto = false;
+
+        }else if (nombreingresado.value.length < 3) {
+            mensaje = "Nombre demasiado corto",
+            mensajeError (mensaje)    
+            correcto = false;
+
+        }else if (nombreingresado.value.length > 15) {
+            mensaje= "Nombre demasiado largo",
+            mensajeError (mensaje)
+            correcto = false;
+        }
+
+        if (correcto) {
+            nombrePersonaje = nombreingresado.value;
+            mostrarMenuClase();
+            return nombrePersonaje
+        }
+    });
 }
 //Clases
 
@@ -131,7 +161,6 @@ function mostrarMenuClase() {
     </div>`
 
 
-    let selectorClase = 0
     let idClase = 0
     elegirClase()
     //Elección de clase
@@ -214,7 +243,7 @@ function confirmar() {
 function preludio() {
     inicioJuego.innerHTML =
         `<h3 class= "preludio">Las sombras hacen eco en tu ser</h3>
-        <p class= "preludio">Deberías estar muerto, pero no lo estás, una extraña fuerza te lleva a completar tu tarea, tus heridas han sanado y te encuentras nuevamente capaz para enfrentar a tus enemigos, el problema... Es que no recuerdas a qué te enfrentaste. Lo mejor será aceptar esta bendición y seguir adelante</p>
+        <p class= "preludio">Deberías estar muerto, pero no lo estás, una extraña fuerza te lleva a completar tu tarea, tus heridas han sanado y te encuentras nuevamente capaz para enfrentar a tus enemigos, el problema... Es que no recuerdas a qué te enfrentaste y apenas recuerdas quién solías ser. Lo mejor será aceptar esta bendición y seguir adelante</p>
         <div class="d-flex justify-content-center">
         <button id="comenzarAventura">Cumpliré mi destino</button>
         </div>`
@@ -229,11 +258,10 @@ function preludio() {
 
 function comenzarAventura() {
     vidaActual = personaje.vida
+    aplicarFondo.classList.add("fondoJuego")
     iniciarRevisarVida();
 
-
-    aplicarFondo.classList.add("fondoJuego")
-
+    //Intervalo que detecta los cambios en la vida del personaje:
     function iniciarRevisarVida() {
         const intervaloVida = setInterval(() => {
             if (juegoTerminado == true) {
@@ -304,8 +332,7 @@ function comenzarAventura() {
         }
 
 
-        let pantallaSuperiorBase = document.getElementById("pantallaSuperior")
-        let pantallaSuperior = pantallaSuperiorBase
+        let pantallaSuperior = document.getElementById("pantallaSuperior")
         let estadisticas = document.getElementById("estadisticas")
         let mostrandoStats = false
         let mostrandoInventario = false;
@@ -313,7 +340,6 @@ function comenzarAventura() {
             if (mostrandoInventario == true) {
                 ocultarInventario();
                 mostrandoInventario = false
-                pantallaCentral.innerHTML = pantallaAnterior
             };
             if (!mostrandoStats) {
                 mostrarStats();
@@ -324,7 +350,6 @@ function comenzarAventura() {
             }
         }
 
-        let pantallaAnterior = null;
         const mochilaJugador = document.getElementById("mochila");
         let pantallaCentral = document.getElementById("pantallaCentral");
 
@@ -351,641 +376,3 @@ function comenzarAventura() {
 }
 
 
-
-//Inventario
-
-
-class consumibleInventario {
-    constructor(id, nombre, efectoSalud, valorTienda, descripcion, imagen) {
-        this.id = id;
-        this.nombre = nombre;
-        this.efectoSalud = efectoSalud;
-        this.valorTienda = valorTienda;
-        this.descripcion = descripcion;
-        this.imagen = imagen;
-
-    }
-}
-
-
-
-
-
-//Items:
-let pocionSalud = new consumibleInventario(101, "pocion de salud", 8, 30, "Poción básica de salud, Restaura 8 puntos de vida", `<img src="./img/pocionSalud.png">`)
-let pocionSaludSuprema = new consumibleInventario(102, "Poción de salud suprema", 50, 200, "Una poción de vida suprema, regenera la vida por completo, muy valiosas y raras", `<img src="./img/pocionSaludSuprema.png">`)
-let manzana = new consumibleInventario(103, "manzana", 1, 3, "Una manzana, restaura 1 punto de vida,", `<img src="./img/manzana.png">`)
-
-
-
-function remover(objeto) {
-    let objetoRemovido = inventario.indexOf(objeto);
-    if (objetoRemovido != -1) {
-        inventario.splice(objetoRemovido, 1)
-        return inventario;
-    }
-}
-//Funciones inventario objetos
-
-
-function usarObjeto() {
-    objetoUsado = inventario.find((objeto) => objeto.id == itemClickeado.id);
-    if (vidaActual < personaje.vida) {
-        objeto = objetoUsado;
-        vidaActual = vidaActual + objeto.efectoSalud
-        remover(objeto)
-    }
-}
-
-
-
-let danioTotal = 1
-function equipar() {
-    if (slotArma.length == 1) {
-        slotArma.length = 0
-    }
-    let armaAEquiparse = inventario.find((arma) => arma.id == itemClickeado.id);
-    slotArma.push(armaAEquiparse)
-    armaEquipada.innerHTML = `${slotArma[0].imagen}`
-}
-
-
-//INVENTARIO JUEGO - IMPORTANTE : 
-
-
-const inventario = [pocionSaludSuprema]
-let slotArma = []
-
-
-
-
-
-//Armas
-
-
-//armas iniciales:
-
-class armaInventario {
-    constructor(id, nombre, danio, habilidadUsada, valorTienda, descripcion, imagen) {
-        this.id = id;
-        this.nombre = nombre;
-        this.danio = danio;
-        this.habilidadUsada = habilidadUsada;
-        this.valorTienda = valorTienda
-        this.descripcion = descripcion;
-        this.imagen = imagen
-    }
-}
-
-function DarArmaInicial() {
-
-    let espadaBasica = new armaInventario(001, "Espada", 2, personaje.fuerza, 15, `Una espada, no es perfecta, pero hace el trabajo. Daño= ${personaje.fuerza + 2} (2 + fuerza)`, `<img src="./img/espada.png"></img>`)
-    let arco = new armaInventario(002, "arco", 6, personaje.agilidad, 60, `Un arco, Daño = ${personaje.agilidad + 6} (6 + agilidad)`, `<img src="./img/arco.png">`)
-    let daga = new armaInventario(003, "daga", 2, personaje.agilidad, 10, `Una daga, especial para encuentros cercanos. Daño = ${personaje.agilidad + 2} (2 + agilidad)`, `<img src="./img/daga.png">`,)
-
-    if (personaje.nombreClase == "guerrero") {
-        inventario.push(espadaBasica);
-    } else if (personaje.nombreClase == "ladrón") {
-        inventario.push(daga);
-    }
-    slotArma.push(inventario[1])
-    armaEquipada.innerHTML = `${slotArma[0].imagen}`
-
-    return armasJuego = [espadaBasica, arco, daga]
-}
-
-//VIDA:
-
-function revisarVida() {
-
-
-    if (vidaActual > personaje.vida) {
-        vidaActual = personaje.vida;
-    }
-
-    porcentajeVida = Math.floor((vidaActual / (personaje.vida)) * 100);
-
-    const barraVida = document.getElementById("barraVida");
-
-    barraVida.style.width = `${Math.floor(porcentajeVida)}%`;
-    barraVida.innerText = `${vidaActual}/${personaje.vida}`
-    barraVida.style.backgroundColor = `red`
-}
-
-let vidaActual = 1;
-let menuMostrarStats = ""
-let menuMostrarInventario = ""
-function mostrarStats() {
-    menuMostrarStats = document.createElement("div")
-    menuMostrarStats.classList.add("col-8")
-    menuMostrarStats.id = "menuStats"
-    menuMostrarStats.innerHTML =
-        `
-    <h4>${nombrePersonaje}</h4>
-    <h5>${personaje.nombreClase}</h5>
-    <table>
-    <tr>
-    <th>Fuerza</th> 
-    <th>Armadura</th>
-    <th>Agilidad</th>
-    </tr>
-    <tr>
-    <td>${personaje.fuerza}</td>
-    <td>${personaje.defensa}</td>
-    <td>${personaje.agilidad}</td>
-    </tr>
-    </table>`
-
-    pantallaSuperior.appendChild(menuMostrarStats)
-    return pantallaSuperior
-}
-
-function ocultarStats() {
-    pantallaSuperior.removeChild(menuMostrarStats)
-}
-
-// Muerte
-function muerte() {
-    inicioJuego.innerHTML = `
-            <div id="pantallaSuperior">
-
-                <h2 class= "text-center">Has muerto</h2>
-                
-                </div>
-                <div id="pantallaCentral">
-                    
-                <div class= "text-center row" id="menuPrincipal">
-                        <div class="col-4"></div>
-                        
-                            <div class="col-4">
-                                <button id="botonReintentar">Volver al menú principal</button>
-                            </div>
-                        </div>
-                        <div class="col-4"></div> 
-            
-                    
-                    </div>
-                    `
-
-    aplicarFondo.classList.remove("fondoJuego")
-    let botonReintentar = document.getElementById("botonReintentar");
-    botonReintentar.onclick = () => {
-        window.location.reload()
-    }
-
-}
-
-//*******************/
-
-// Mostrar inventario e interacciones durante el juego
-function mostrarInventario() {
-    let imagenDefecto = `<img src="./img/plantillaInventario.png"></img>`
-    let inventarioMostrado = inventario.map((objeto) => {
-        return {
-            id: objeto.id,
-            imagenObjeto: objeto.imagen,
-            nombreObjeto: objeto.nombre,
-            descripcionObjeto: objeto.descripcion,
-        };
-    });
-
-    while (inventarioMostrado.length < 10) {
-        inventarioMostrado.push({
-            id: 0,
-            imagenObjeto: imagenDefecto,
-            nombreObjeto: "Vacío",
-            descripcionObjeto: " ",
-
-        });
-    }
-
-    menuMostrarInventario = document.createElement("div")
-    menuMostrarInventario.classList.add("row")
-
-    menuMostrarInventario.innerHTML = `
-    <div class= "col-8" id= "menuInventario">
-    <div class= "row d-flex justify-content-around align-items-center">
-    <div class= "d-flex cuadricula">${inventarioMostrado[0].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[1].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[2].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[3].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[4].imagenObjeto}</div>
-    </div>
-    <div class= "row d-flex justify-content-around align-items-center">
-    <div class= "d-flex cuadricula">${inventarioMostrado[5].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[6].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[7].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[8].imagenObjeto}</div>
-    <div class= "d-flex cuadricula">${inventarioMostrado[9].imagenObjeto}</div>
-    </div>
-    </div>
-    <div class= "col-3" id="muestraInventario"><p>Pasa el mouse sobre un objeto para saber qué hace. Clickealo para usarlo instantaneamente</p></div>
-    `;
-
-    pantallaCentral.appendChild(menuMostrarInventario);
-
-
-    let infoItem = menuMostrarInventario.getElementsByClassName("cuadricula");
-    for (let i = 0; i < infoItem.length; i++) {
-
-        let muestraInventario = document.getElementById("muestraInventario");
-        infoItem[i].addEventListener("mouseover", () => {
-            infoItem[i].classList.add("cuadriculaGlow")
-            muestraInventario.innerHTML =
-                `<h5>${inventarioMostrado[i].nombreObjeto}</h5>
-                <br>
-            <p>${inventarioMostrado[i].descripcionObjeto}</p>
-            `
-        })
-
-        infoItem[i].addEventListener("mouseout", () => {
-            infoItem[i].classList.remove("cuadriculaGlow")
-            muestraInventario.innerHTML =
-                `<p>Pasa el mouse sobre un objeto para saber qué hace. Clickealo para usarlo instantaneamente</p>`
-        })
-
-
-        infoItem[i].addEventListener("click", () => {
-            let funcionesInventario = inventarioMostrado[i].id;
-            interaccionInventario();
-            ocultarInventario();
-            mostrarInventario();
-
-            function interaccionInventario() {
-                switch (funcionesInventario) {
-                    case 1:
-                        itemClickeado = inventarioMostrado[i];
-                        equipar()
-                        break;
-                    case 2:
-                        itemClickeado = inventarioMostrado[i];
-                        equipar()
-                        break;
-                    case 3:
-                        itemClickeado = inventarioMostrado[i];
-                        equipar()
-                        break;
-                    case 101:
-                        itemClickeado = inventarioMostrado[i]
-                        usarObjeto()
-                        break
-                    case 102:
-                        itemClickeado = inventarioMostrado[i]
-                        usarObjeto()
-                        break;
-                    case 103:
-                        itemClickeado = inventarioMostrado[i]
-                        usarObjeto()
-                        break;
-                }
-            }
-        })
-    }
-
-
-}
-
-
-
-//Sin la variable debugInventario, el código podría tener problemas al cambiarse el innerHTML de la pantallaCentral
-function ocultarInventario() {
-    let debugInventario = document.getElementById("menuInventario");
-    if (debugInventario) {
-        pantallaCentral.removeChild(menuMostrarInventario)
-    };
-    inventarioMostrado = false
-}
-
-
-
-
-//Interaccion para entrar en combate
-
-
-
-//COMBATE
-
-
-
-class Enemigo {
-    constructor(nombreEnemigo, saludActualEnemigo, saludEnemigo, ataqueEnemigo, imagenEnemigo) {
-        this.nombreEnemigo = nombreEnemigo;
-        this.saludActualEnemigo = saludActualEnemigo
-        this.saludEnemigo = saludEnemigo;
-        this.ataqueEnemigo = ataqueEnemigo;
-        this.imagenEnemigo = imagenEnemigo;
-    }
-}
-
-
-let lobo1 = new Enemigo("Lobo", 3, 3, 2, `<img src="./img/lobo.png">`);
-let lobo2 = new Enemigo("Lobo", 3, 3, 2, `<img src="./img/lobo.png">`);
-let lobo3 = new Enemigo("Lobo", 3, 3, 1, `<img src="./img/lobo.png">`);
-let bandido1 = new Enemigo(" bandido", 5, 5, 2, `<img src= "./img/bandido.png">`);
-let bandido2 = new Enemigo(" bandido", 10, 10, 2, `<img src= "./img/bandido.png">`);
-let zombie1 = new Enemigo("Zombie", 5, 10, 3, `<img src= "./img/zombie.png">`);
-let zombie2 = new Enemigo("Zombie", 5, 10, 4, `<img src= "./img/zombie.png">`);
-let reyEsqueleto = new Enemigo("Rey Esqueleto", 30, 30, 5, `<img src= "./img/reyEsqueleto.png">`)
-
-function Combate() {
-    let ordenCombate = [...listaEnemigos, jugador];
-    let rondaActual = 0;
-
-    let contadorSaludEnemigo = []
-    contadorSaludEnemigo = listaEnemigos.map((datosEnemigo) => {
-        return {
-            saludActualEnemigo: datosEnemigo.saludActualEnemigo,
-            saludEnemigo: datosEnemigo.saludEnemigo,
-            ataqueEnemigo: datosEnemigo.ataqueEnemigo
-        }
-    });
-
-
-    pantallaCentral.innerHTML = `
-    <div class="row">
-        <div class="col-12" id="menuCombate">
-            <div class="d-flex justify-content-center align-items-center" id="tablaCombate"></div> 
-        </div>
-        <div id="statsCombate"></div>
-    </div>`;
-
-    let displayEnemigos = document.getElementById("tablaCombate");
-    let displayStatsEnemigo = document.getElementById("statsCombate")
-    for (let enemigo of listaEnemigos) {
-        displayEnemigos.innerHTML += `<div class= "detectarEnemigo">${enemigo.imagenEnemigo} </div> 
-        <div class="flexEnemigo">
-            <div class="detectarVidaEnemigo"></div> 
-            <div class="detectarDanioEnemigo"></div>
-        </div>`
-    }
-
-    actualizarVidaEnemigo();
-
-    function actualizarVidaEnemigo() {
-        let displayVida = document.querySelectorAll(`.detectarVidaEnemigo`)
-        let displayDanio = document.querySelectorAll(`.detectarDanioEnemigo`)
-        for (let i = 0; i < contadorSaludEnemigo.length; i++) {
-            displayVida[i].innerHTML = `${contadorSaludEnemigo[i].saludActualEnemigo} / ${contadorSaludEnemigo[i].saludEnemigo}`
-            if (rondaActual > 1) {
-                displayDanio[i].innerHTML = `<img src= "../img/ataqueEnemigoIcono.png">${contadorSaludEnemigo[i].ataqueEnemigo}`
-            }
-        }
-    }
-
-
-    let asignarEnemigos = document.getElementsByClassName("detectarEnemigo");
-    for (let i = 0; i < asignarEnemigos.length; i++) {
-        let enemigoAsignado = asignarEnemigos[i];
-        enemigoAsignado.setAttribute("id", `enemigo${i + 1}`);
-    }
-
-    detectarRonda();
-
-    function detectarRonda() {
-        if (rondaActual === 0) {
-            turnoJugador();
-        } else if (rondaActual === ordenCombate.length) {
-            rondaActual = 0;
-            if (listaEnemigos.length == 0) {
-                actualizarVidaEnemigo()
-                darloot()
-
-            }
-        } else {
-            let enemigoActual = ordenCombate[rondaActual - 1];
-            turnoEnemigo(enemigoActual);
-        }
-    }
-
-    function turnoJugador() {
-        for (let i = 0; i < asignarEnemigos.length; i++) {
-            let cuadriculaEnemigo = asignarEnemigos[i];
-            let enemigo = listaEnemigos[i];
-            if (enemigo.saludActualEnemigo > 0) {
-                const handler = () => {
-                    ataqueJugador(enemigo);
-                    contadorSaludEnemigo[i].saludActualEnemigo = enemigo.saludActualEnemigo
-                    detectarRonda();
-                    if (contadorSaludEnemigo[i].saludActualEnemigo <= 0) {
-                        cuadriculaEnemigo.removeEventListener('click', handler);
-                        cuadriculaEnemigo.classList.remove("enemigoAtacable")
-                    }
-                }
-                cuadriculaEnemigo.addEventListener("click", handler);
-                cuadriculaEnemigo.classList.add("enemigoAtacable")
-
-            }
-        }
-    }
-
-
-    function ataqueJugador(enemigo) {
-        let ataque = parseInt(slotArma[0].danio + slotArma[0].habilidadUsada)
-        enemigo.saludActualEnemigo -= ataque;
-        rondaActual++;
-        if (enemigo.saludActualEnemigo <= 0) {
-            enemigo.saludActualEnemigo = 0
-            muerteEnemigo(enemigo)
-        }
-        actualizarVidaEnemigo()
-    }
-
-    function muerteEnemigo(enemigo) {
-        let enemigoMuerto = listaEnemigos.indexOf(enemigo);
-        listaEnemigos.splice(enemigoMuerto, 1)
-        ordenCombate.splice(enemigoMuerto, 1)
-    }
-
-
-
-
-
-    function turnoEnemigo(enemigo) {
-        actualizarVidaEnemigo();
-        danioRecibido = enemigo.ataqueEnemigo - personaje.defensa;
-        if (danioRecibido < 1) { danioRecibido = 1 };
-        vidaActual -= danioRecibido
-        revisarVida()
-        rondaActual++;
-        detectarRonda();
-    }
-
-
-}
-
-combateGanado = false
-
-
-
-
-function encuentro1() {
-
-    jugador = personaje;
-    listaEnemigos = [lobo1, lobo2, bandido1, lobo3]
-
-    Combate()
-    darloot = () => {
-        lootCombate(pocionSalud, pocionSalud, manzana)
-            .then((checkpoint) => {
-                combateGanado = false
-            })
-    }
-}
-
-
-function lootCombate(objeto1, objeto2, objeto3) {
-    return new Promise((resolve, reject) => {
-        pantallaCentral.innerHTML =
-            `<div class= "row">
-            <div class="col-4"></div>
-            <div id="mensajeLoot">
-            <h5>Has conseguido los siguientes objetos:</h5> 
-            <p>${objeto1.nombre}</p>
-            <p>${objeto2.nombre}</p> 
-            <p>${objeto3.nombre}</p> 
-            <button id="aceptarLoot">Aceptar</button>
-            </div> 
-            <div class="col-4"></div>
-          </div>`;
-
-        inventario.push(objeto1, objeto2, objeto3);
-
-        let lootAceptado = document.getElementById("aceptarLoot");
-        lootAceptado.onclick = () => {
-            pantallaCentral.innerHTML = "";
-            checkpoint++;
-            detectarCheckpoint();
-            resolve(checkpoint);
-        };
-    });
-}
-
-let checkpoint = 1
-
-function detectarCheckpoint() {
-    if (checkpoint == 2) {
-        checkpoint2()
-    }
-    if (checkpoint == 3) {
-        checkpoint3()
-    }
-}
-
-function recogerArco() {
-    arco = armasJuego[1]
-    inventario.push(arco)
-}
-
-function checkpoint2() {
-    pantallaCentral.innerHTML =
-        `<div class= "row">
-    <div class="col-2"></div>
-    <div class= "col-8" id="mensajeCheckpoint">
-    <h5>El soldado muerto</h5>
-    <p>Encuentras un soldado muerto, su escudo está roto, pero reconoces su símbolo, es un soldado de la realeza, sientes cierto vínculo ¿Quizás serviste a algún reino antes de morir? También encuentras un arco, fabricado con aurumplast, un metal dorado de caracteristicas similares al oro, pero con una mayor flexibilidad y resistencia. En manos capaces, este arco podría ser devastador ¿Deseas tomarlo?</p>
-    <button id= "tomarArco">Sí (Añadir al inventario)</button> <button id=no>No (Seguir tu camino)</button>
-    </div>
-    <div class="col-2"></div>
-    </div>`
-
-    let tomarArco = document.getElementById("tomarArco")
-    tomarArco.onclick = () => {
-        recogerArco();
-        pantallaCentral.innerHTML = "";
-        eventoArcoResuelto();
-    }
-
-    document.getElementById("no").onclick = () => {
-        pantallaCentral.innerHTML = "";
-        eventoArcoResuelto()
-    }
-
-    function eventoArcoResuelto() {
-        let explorarBosque2 = document.createElement("button")
-        explorarBosque2.innerText = "Explorar el bosque"
-
-        mostrarBoton = document.getElementById("ubicacionBotonExplorar")
-        mostrarBoton.appendChild(explorarBosque2)
-
-        explorarBosque2.onclick = () => {
-            encuentro2()
-            mostrarBoton.removeChild(explorarBosque2)
-        }
-    }
-}
-
-
-
-function encuentro2() {
-    listaEnemigos = [lobo1, bandido1, bandido2, zombie1]
-    listaEnemigos.forEach(enemigo => {
-        enemigo.saludActualEnemigo = enemigo.saludEnemigo
-    });
-
-    Combate()
-    darloot = () => {
-        lootCombate(pocionSalud, pocionSaludSuprema, manzana)
-            .then((checkpoint) => {
-                combateGanado = false
-            })
-    }
-}
-
-function checkpoint3() {
-    let explorarBosque3 = document.createElement("button")
-    explorarBosque3.innerText = "Enfrentar al rey Esqueleto"
-
-    mostrarBoton = document.getElementById("ubicacionBotonExplorar")
-    mostrarBoton.appendChild(explorarBosque3)
-
-    explorarBosque3.onclick = () => {
-        encuentro3()
-        mostrarBoton.removeChild(explorarBosque3)
-    }
-}
-
-function encuentro3() {
-    listaEnemigos = [zombie1, reyEsqueleto, zombie2]
-    listaEnemigos.forEach(enemigo => {
-        enemigo.saludActualEnemigo = enemigo.saludEnemigo
-    });
-
-    Combate()
-    darloot = () => {
-        juegoTerminado = true
-        epilogo()
-    }
-}
-
-function epilogo() {
-    inicioJuego.innerHTML = `
-                <div id="pantallaSuperior">
-    
-                    <h2 class= "text-center">Cumpliste tu destino</h2>
-                    
-                    </div>
-                    <div id="pantallaCentral">
-
-                    <p>Con el golpe final sobre el rey esqueleto, te declaras victorioso, puedes ver como grupos de muertos vivientes comienzan a aparecer entre los árboles, pero, al momento de tomar tu arma para combatirlos, notas que comienzan a arrodillarse ante tí. Y entonces lo comprendiste, las sombras te trajeron de vuelta, no para terminar con el reinado del campeón de los no muertos, sino para reemplazarlo. Y así será. Pues tu voluntad lentamente se pierde mientras tomas tu trofeo. La corona de huesos, que te conferirá el poder necesario para gobernar esta tierra, como adalid de la muerte en la tierra de los vivos</p>
-                        
-                    <div class= "text-center row" id="menuPrincipal">
-                            <div class="col-4"></div>
-                            
-                                <div class="col-4">
-                                <button id="botonReintentar">Volver a jugar</button>
-                                </div>
-                            </div>
-                            <div class="col-4"></div> 
-                
-                        
-                        </div>
-                        `
-
-    aplicarFondo.classList.remove("fondoJuego")
-    let botonReintentar = document.getElementById("botonReintentar");
-    botonReintentar.onclick = () => {
-        window.location.reload()
-    }
-    return juegoTerminado
-}
-game()
