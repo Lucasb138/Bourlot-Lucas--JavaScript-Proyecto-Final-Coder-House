@@ -1,7 +1,6 @@
 //COMBATE e historia
 
 
-
 class Enemigo {
     constructor(nombreEnemigo, saludActualEnemigo, saludEnemigo, ataqueEnemigo, imagenEnemigo) {
         this.nombreEnemigo = nombreEnemigo;
@@ -63,7 +62,7 @@ function Combate() {
         for (let i = 0; i < contadorSaludEnemigo.length; i++) {
             displayVida[i].innerHTML = `${contadorSaludEnemigo[i].saludActualEnemigo} / ${contadorSaludEnemigo[i].saludEnemigo}`
             if (rondaActual > 1) {
-                displayDanio[i].innerHTML = `<img src= "../img/ataqueEnemigoIcono.png">${contadorSaludEnemigo[i].ataqueEnemigo}`
+                displayDanio[i].innerHTML = `<img src= "./img/ataqueEnemigoIcono.png">${contadorSaludEnemigo[i].ataqueEnemigo}`
             }
         }
     }
@@ -302,7 +301,6 @@ function epilogo() {
                     
                     </div>
                     <div id="pantallaCentral">
-
                     <p>Con el golpe final sobre el rey esqueleto, te declaras victorioso, puedes ver como grupos de muertos vivientes comienzan a aparecer entre los árboles, pero, al momento de tomar tu arma para combatirlos, notas que comienzan a arrodillarse ante tí. Y entonces lo comprendiste, las sombras te trajeron de vuelta, no para terminar con el reinado del campeón de los no muertos, sino para reemplazarlo. Y así será. Pues tu voluntad lentamente se pierde mientras tomas tu trofeo. La corona de huesos, que te conferirá el poder necesario para gobernar esta tierra, como adalid de la muerte en la tierra de los vivos. <strong>${nombrePersonaje}</strong> se ha convertido en el rey esqueleto</p>
                         
                     <div class= "text-center row" id="menuPrincipal">

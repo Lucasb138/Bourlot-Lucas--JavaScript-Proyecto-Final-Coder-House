@@ -14,7 +14,7 @@ function game() {
 }
 
 async function obtenerJSON(){
-    let URLJSON = '/consejos.json';
+    let URLJSON = './consejos.json';
     const respuesta = await fetch(URLJSON);
     const data = await respuesta.json();
     consejos = data;
@@ -117,7 +117,7 @@ class claseElegible {
 //  claseElegida(nomClase,  hp,fue,def,agi) 
 let personaje = new claseElegible(" ", 1, 1, 1, 1);
 let guerrero = new claseElegible("guerrero", 25, 7, 3, 4);
-let ladron = new claseElegible("ladrón", 15, 4, 2, 9);
+let ladron = new claseElegible("ladron", 15, 4, 2, 9);
 
 function mostrarMenuClase() {
 
@@ -145,9 +145,9 @@ function mostrarMenuClase() {
         </div>
 
     <div class="card col-2 personajeSeleccionable" style="width: 18rem;">
-        <img class="card-img-top" src="./img/ladrón.png" alt="Card image cap">
+        <img class="card-img-top" src="./img/ladron.png" alt="Card image cap">
     <div class="card-body estiloTarjeta">
-        <h5 class="card-title text-center">ladrón</h5>
+        <h5 class="card-title text-center">ladron</h5>
         <p class="card-text">
         <div>
         salud: 15 <br>
