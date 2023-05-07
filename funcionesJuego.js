@@ -207,9 +207,6 @@ function mostrarMenuClase() {
 }
 
 
-
-
-//Elección de clase 
 //Confirmar clase:
 
 function confirmar() {
