@@ -84,7 +84,7 @@ function iniciarJuego() {
             mensajeError (mensaje)
             correcto = false;
 
-        }else if (nombreingresado.value.length < 3) {
+        }else if (nombreingresado.value.length < 2) {
             mensaje = "Nombre demasiado corto",
             mensajeError (mensaje)    
             correcto = false;
@@ -374,5 +374,3 @@ function comenzarAventura() {
 
     let armaEquipada = document.getElementById("armaEquipada");
 }
-
-

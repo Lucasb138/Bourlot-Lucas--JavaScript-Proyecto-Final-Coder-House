@@ -84,12 +84,16 @@ function DarArmaInicial() {
     let arco = new armaInventario(002, "arco", 6, personaje.agilidad, `Un arco, Daño = ${personaje.agilidad + 6} (6 + agilidad)`, `<img src="./img/arco.png">`)
     let daga = new armaInventario(003, "daga", 2, personaje.agilidad, `Una daga, especial para encuentros cercanos. Daño = ${personaje.agilidad + 2} (2 + agilidad)`, `<img src="./img/daga.png">`,)
 
+    let armaInicial = espadaBasica;
+
     if (personaje.nombreClase == "guerrero") {
         inventario.push(espadaBasica);
+        armaInicial = espadaBasica
     } else if (personaje.nombreClase == "ladrón") {
+        armaInicial = daga;
         inventario.push(daga);
     }
-    slotArma.push(inventario[1])
+    slotArma.push(armaInicial)
     armaEquipada.innerHTML = `${slotArma[0].imagen}`
 
     return armasJuego = [espadaBasica, arco, daga]
